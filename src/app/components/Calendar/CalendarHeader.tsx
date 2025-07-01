@@ -24,17 +24,18 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
   return (
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold">{getMonthName(currentMonth)}</h2>
+      <h2 className="text-xl font-bold text-pink-400">
+        {getMonthName(currentMonth)}
+      </h2>
       <div className="flex space-x-2">
-        <Button onClick={handlePrevMonth} variant="secondary">
+        <Button onClick={handlePrevMonth} variant="primary">
           &lt;
         </Button>
-        <Button onClick={handleNextMonth} variant="secondary">
+        <Button onClick={handleNextMonth} variant="primary">
           &gt;
         </Button>
       </div>
     </div>
   );
 };
-
 export default CalendarHeader;

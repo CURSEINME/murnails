@@ -1,0 +1,72 @@
+"use client";
+
+import { useState } from "react";
+import Calendar from "../components/Calendar/Calendar";
+import TimeSlotsAdmin from "../components/TimeSlots/TimeSlotsAdmin";
+
+const Page = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const handleMonthChange = (date: Date) => {
+    setCurrentMonth(date);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-5">
+      {/* Календарь */}
+      <div className="lg:sticky lg:top-8 h-fit">
+        <Calendar
+          currentMonth={currentMonth}
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+          onMonthChange={handleMonthChange}
+        />
+      </div>
+
+      <div className="bg-gray-900 rounded-xl shadow-xl p-6 border border-gray-800">
+        {selectedDate ? (
+          <>
+            <h2 className="text-xl font-bold text-pink-400 mb-6">
+              Cвободное время на{" "}
+              {selectedDate.toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </h2>
+            <TimeSlotsAdmin
+              selectedDate={selectedDate}
+              onSlotsUpdate={() => {}}
+            />
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-64">
+            <div className="text-gray-400 text-lg mb-4">
+              Выберите дату в календаре
+            </div>
+            <svg
+              className="w-12 h-12 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Page;

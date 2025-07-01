@@ -7,6 +7,7 @@ import {
   deleteTimeSlot,
   getTimeSlots,
 } from "../../../../actions/timeSlots";
+import { useSession } from "next-auth/react";
 
 interface TimeSlotsAdminProps {
   selectedDate: Date | null;
@@ -19,6 +20,8 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
 }) => {
   const [newTime, setNewTime] = useState("");
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
+
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchTimeSlots = async () => {
@@ -37,13 +40,11 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
     // setError(null);
 
     try {
-      // Создаем новый слот через action
       await createTimeSlot({
         date: selectedDate,
         time: newTime,
       });
 
-      // Обновляем локальное состояние
       const updatedSlots = [...timeSlots, newTime].sort();
       setTimeSlots(updatedSlots);
       onSlotsUpdate(updatedSlots);
@@ -62,18 +63,15 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
     // setError(null);
 
     try {
-      // Удаляем слот через action
       await deleteTimeSlot({
         date: selectedDate,
         time,
       });
 
-      // Обновляем локальное состояние
       const updatedSlots = timeSlots.filter((t) => t !== time);
       setTimeSlots(updatedSlots);
       onSlotsUpdate(updatedSlots);
     } catch (err) {
-      // setError("Не удалось удалить временной слот");
       console.error("Error deleting time slot:", err);
     } finally {
       // setIsLoading(false);
@@ -82,23 +80,27 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-semibold mb-2">
-        Управление временными слотами
-      </h3>
+      {session?.user && (
+        <>
+          <h3 className="text-lg font-semibold mb-2 text-pink-400">
+            Управление временными слотами
+          </h3>
 
-      <div className="mb-4 p-3 bg-gray-100 rounded">
-        <div className="flex space-x-2 items-end">
-          <Input
-            type="time"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
-            label="Новое время"
-          />
-          <Button onClick={addTimeSlot} variant="primary">
-            Добавить
-          </Button>
-        </div>
-      </div>
+          <div className="mb-4 p-3 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex space-x-2 items-end">
+              <Input
+                type="time"
+                value={newTime}
+                onChange={(e) => setNewTime(e.target.value)}
+                label="Новое время"
+              />
+              <Button onClick={addTimeSlot} variant="primary">
+                Добавить
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
 
       <TimeSlotsList timeSlots={timeSlots} onRemove={removeTimeSlot} />
     </div>
