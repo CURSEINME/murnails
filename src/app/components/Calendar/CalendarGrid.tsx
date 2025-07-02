@@ -22,7 +22,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   return (
     <div className="grid grid-cols-7 gap-1 mb-4">
       {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
-        <div key={day} className="text-center font-semibold p-2">
+        <div
+          key={day}
+          className="text-center font-semibold p-2 h-10 w-10 flex items-center justify-center"
+        >
           {day}
         </div>
       ))}

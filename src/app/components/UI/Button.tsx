@@ -13,8 +13,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const baseClasses = 'px-3 py-1 rounded transition-colors';
   const variantClasses = {
-    primary: 'bg-gray-800 text-pink-400 hover:bg-gray-700 border-gray-700',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+    primary: 'bg-black text-pink-400 hover:bg-gray-700 border-gray-700',
+    secondary: 'bg-neutral-800 text-pink-500 hover:bg-gray-300'
   };
 
   return (

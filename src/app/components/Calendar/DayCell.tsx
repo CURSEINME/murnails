@@ -18,11 +18,10 @@ const DayCell: React.FC<DayCellProps> = ({ dayInfo, onSelect }) => {
   return (
     <div
       onClick={handleClick}
-      className={`p-2 h-12 text-center border border-gray-700 rounded-lg cursor-pointer transition-colors
-        ${dayInfo.isToday ? "bg-pink-500 text-white" : ""}
-        ${dayInfo.isSelected ? "bg-pink-700 text-white font-bold" : ""}
-        ${!dayInfo.isCurrentMonth ? "text-gray-500" : "text-gray-200"}
-        hover:bg-gray-800 active:bg-gray-700`}
+      className={`p-2 h-10 w-10 text-center rounded-full cursor-pointer transition-colors
+        ${dayInfo.isToday ? "border border-gray-500 text-white" : ""}
+        ${dayInfo.isSelected ? "bg-pink-500 text-white font-bold" : ""}
+        hover:bg-gray-800`}
     >
       {dayInfo.date.getDate()}
     </div>

@@ -3,17 +3,26 @@
 import { useState } from "react";
 import Calendar from "../components/Calendar/Calendar";
 import TimeSlotsAdmin from "../components/TimeSlots/TimeSlotsAdmin";
+import Button from "../components/UI/Button";
+import { sendMail } from "../../../actions/email";
 
 const Page = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    setSelectedTime(null);
   };
 
   const handleMonthChange = (date: Date) => {
     setCurrentMonth(date);
+    setSelectedTime(null);
+  };
+
+  const handleSelectedTime = (time: string) => {
+    setSelectedTime(time);
   };
 
   return (
@@ -28,7 +37,7 @@ const Page = () => {
         />
       </div>
 
-      <div className="bg-gray-900 rounded-xl shadow-xl p-6 border border-gray-800">
+      <div className="bg-neutral-800/70 rounded-xl shadow-xl p-6 border border-gray-800">
         {selectedDate ? (
           <>
             <h2 className="text-xl font-bold text-pink-400 mb-6">
@@ -41,7 +50,8 @@ const Page = () => {
             </h2>
             <TimeSlotsAdmin
               selectedDate={selectedDate}
-              onSlotsUpdate={() => {}}
+              selectedTime={selectedTime}
+              setSelectedTime={handleSelectedTime}
             />
           </>
         ) : (
@@ -65,6 +75,11 @@ const Page = () => {
           </div>
         )}
       </div>
+      {selectedTime && (
+        <Button onClick={() => sendMail('asdf')} variant="secondary" type='button'>
+          Продолжить
+        </Button>
+      )}
     </div>
   );
 };

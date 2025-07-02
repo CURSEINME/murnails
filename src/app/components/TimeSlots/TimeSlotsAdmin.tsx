@@ -11,12 +11,14 @@ import { useSession } from "next-auth/react";
 
 interface TimeSlotsAdminProps {
   selectedDate: Date | null;
-  onSlotsUpdate: (slots: string[]) => void;
+  selectedTime: string | null;
+  setSelectedTime: (time: string) => void;
 }
 
 const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
   selectedDate,
-  onSlotsUpdate,
+  selectedTime,
+  setSelectedTime,
 }) => {
   const [newTime, setNewTime] = useState("");
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
@@ -47,7 +49,6 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
 
       const updatedSlots = [...timeSlots, newTime].sort();
       setTimeSlots(updatedSlots);
-      onSlotsUpdate(updatedSlots);
       setNewTime("");
     } catch (err) {
       // setError("Не удалось добавить временной слот");
@@ -70,7 +71,6 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
 
       const updatedSlots = timeSlots.filter((t) => t !== time);
       setTimeSlots(updatedSlots);
-      onSlotsUpdate(updatedSlots);
     } catch (err) {
       console.error("Error deleting time slot:", err);
     } finally {
@@ -86,7 +86,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
             Управление временными слотами
           </h3>
 
-          <div className="mb-4 p-3 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="mb-4 p-3 bg-neutral-900 rounded-lg border border-gray-700">
             <div className="flex space-x-2 items-end">
               <Input
                 type="time"
@@ -102,7 +102,12 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
         </>
       )}
 
-      <TimeSlotsList timeSlots={timeSlots} onRemove={removeTimeSlot} />
+      <TimeSlotsList
+        timeSlots={timeSlots}
+        onRemove={removeTimeSlot}
+        selectedTime={selectedTime}
+        onTimeSelect={setSelectedTime}
+      />
     </div>
   );
 };

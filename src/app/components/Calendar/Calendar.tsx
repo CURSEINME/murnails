@@ -9,7 +9,7 @@ const Calendar: React.FC<CalendarProps> = ({
   onMonthChange,
 }) => {
   return (
-    <div className="bg-gray-900 rounded-xl shadow-xl  p-4 sm:px-6 lg:px-8">
+    <div className="bg-neutral-800/70 rounded-xl shadow-xl  p-4 sm:px-6 lg:px-8">
       <CalendarHeader
         currentMonth={currentMonth}
         onMonthChange={onMonthChange}
