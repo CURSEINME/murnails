@@ -88,7 +88,7 @@ const ServiceSelection = () => {
       {/* Список услуг */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map((service) => (
-          <Link href={`/calendar`} key={service.id}>
+          <Link href={`/calendar?service=${service.name}`} key={service.id}>
             <motion.div
               whileHover={{ scale: 1.03 }}
               onClick={() => handleSelectService(service.id)}

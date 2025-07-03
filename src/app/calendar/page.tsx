@@ -4,12 +4,14 @@ import { useState } from "react";
 import Calendar from "../components/Calendar/Calendar";
 import TimeSlotsAdmin from "../components/TimeSlots/TimeSlotsAdmin";
 import Button from "../components/UI/Button";
-import { sendMail } from "../../../actions/email";
+import { redirect, useSearchParams } from "next/navigation";
 
 const Page = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
@@ -18,11 +20,23 @@ const Page = () => {
 
   const handleMonthChange = (date: Date) => {
     setCurrentMonth(date);
+    setSelectedDate(null);
     setSelectedTime(null);
   };
 
   const handleSelectedTime = (time: string) => {
     setSelectedTime(time);
+  };
+
+  const handleClick = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set("day", selectedDate?.getDay()?.toString() || "");
+    params.set("month", selectedDate?.getMonth()?.toString() || "");
+    params.set("year", selectedDate?.getFullYear()?.toString() || "");
+    params.set("time", selectedTime || "");
+
+    redirect(`/contact?${params.toString()}`);
   };
 
   return (
@@ -39,7 +53,7 @@ const Page = () => {
 
       <div className="bg-neutral-800/70 rounded-xl shadow-xl p-6 border border-gray-800">
         {selectedDate ? (
-          <>
+          <div className={`h-full flex flex-col`}>
             <h2 className="text-xl font-bold text-pink-400 mb-6">
               Cвободное время на{" "}
               {selectedDate.toLocaleDateString("ru-RU", {
@@ -53,7 +67,17 @@ const Page = () => {
               selectedTime={selectedTime}
               setSelectedTime={handleSelectedTime}
             />
-          </>
+            {selectedTime && (
+              <Button
+                onClick={handleClick}
+                variant="secondary"
+                type="button"
+                className="lg:mt-auto mt-10"
+              >
+                Продолжить
+              </Button>
+            )}
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-64">
             <div className="text-gray-400 text-lg mb-4">
@@ -75,11 +99,6 @@ const Page = () => {
           </div>
         )}
       </div>
-      {selectedTime && (
-        <Button onClick={() => sendMail('asdf')} variant="secondary" type='button'>
-          Продолжить
-        </Button>
-      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import Button from "./Button";
 
 export const Header = () => {
   const { data: session } = useSession();
@@ -50,13 +51,13 @@ export const Header = () => {
               <button onClick={() => signOut()}>logout</button>
             </div>
           ) : (
-            <button
+            <Button
               type='button'
               className="px-4 py-2 rounded-md bg-pink-600 text-white hover:bg-pink-700 transition-colors"
               onClick={() => signIn('google')}
             >
               Войти
-            </button>
+            </Button>
           )}
         </div>
       </div>
