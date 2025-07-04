@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Calendar from "../components/Calendar/Calendar";
 import TimeSlotsAdmin from "../components/TimeSlots/TimeSlotsAdmin";
 import Button from "../components/UI/Button";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect, RedirectType, useSearchParams } from "next/navigation";
+import { getDateSlots } from "../../../actions/timeSlots";
+import Loading from "../components/UI/Loading";
 
-const Page = () => {
+function CalendarContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const [dateSlots, setDateSlots] = useState<Date[]>([]);
 
   const searchParams = useSearchParams();
 
@@ -36,22 +40,29 @@ const Page = () => {
     params.set("year", selectedDate?.getFullYear()?.toString() || "");
     params.set("time", selectedTime || "");
 
-    redirect(`/contact?${params.toString()}`);
+    redirect(`/contact?${params.toString()}`, RedirectType.push);
   };
 
+  useEffect(() => {
+    const getDates = async () => {
+      const data = await getDateSlots();
+      setDateSlots(data);
+    };
+    getDates();
+  }, []);
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-5">
-      {/* Календарь */}
       <div className="lg:sticky lg:top-8 h-fit">
         <Calendar
           currentMonth={currentMonth}
           selectedDate={selectedDate}
           onDateSelect={handleDateSelect}
           onMonthChange={handleMonthChange}
+          dateSlots={dateSlots}
         />
       </div>
 
-      <div className="bg-neutral-800/70 rounded-xl shadow-xl p-6 border border-gray-800">
+      <div className="bg-neutral-800/70 rounded-xl shadow-xl p-6">
         {selectedDate ? (
           <div className={`h-full flex flex-col`}>
             <h2 className="text-xl font-bold text-pink-400 mb-6">
@@ -72,7 +83,7 @@ const Page = () => {
                 onClick={handleClick}
                 variant="secondary"
                 type="button"
-                className="lg:mt-auto mt-10"
+                className="mt-10"
               >
                 Продолжить
               </Button>
@@ -100,6 +111,14 @@ const Page = () => {
         )}
       </div>
     </div>
+  );
+}
+
+const Page = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CalendarContent />
+    </Suspense>
   );
 };
 

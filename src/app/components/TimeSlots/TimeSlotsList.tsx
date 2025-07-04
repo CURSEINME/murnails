@@ -16,9 +16,9 @@ const TimeSlotsList: React.FC<TimeSlotsListProps> = ({
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
       {timeSlots.length > 0 ? (
-        timeSlots.map((time) => (
+        timeSlots.map((time, index) => (
           <TimeSlotItem
-            key={time}
+            key={index}
             time={time}
             onRemove={onRemove}
             onTimeSelect={onTimeSelect}

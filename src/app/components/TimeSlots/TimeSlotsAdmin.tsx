@@ -86,7 +86,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
             Управление временными слотами
           </h3>
 
-          <div className="mb-4 p-3 bg-neutral-900 rounded-lg border border-gray-700">
+          <div className="mb-4 p-3 bg-neutral-900/70 rounded-lg border border-gray-700">
             <div className="flex space-x-2 items-end">
               <Input
                 type="time"

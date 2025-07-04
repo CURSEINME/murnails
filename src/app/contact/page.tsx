@@ -1,10 +1,12 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { sendMail } from "../../../actions/email";
+import Loading from "../components/UI/Loading";
+import { toast } from "react-toastify";
 
-export default function ContactForm() {
+function ContactContent() {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -20,12 +22,48 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     console.log();
     e.preventDefault();
-    await sendMail({
-      date: [day, time, month, year],
-      service,
-      tel: formData.phone,
-      name: formData.name,
-    });
+    try {
+      const result = await sendMail({
+        date: [day, time, month, year],
+        service,
+        tel: formData.phone,
+        name: formData.name,
+      });
+
+      if (result.ok) {
+        toast.success("✅ Ваша заявка успешно отправлена!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        // Очистка формы после успешной отправки
+        setFormData({
+          name: "",
+          phone: "",
+        });
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      toast.error("❌ Произошла ошибка при отправке", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      console.error("Ошибка:", error);
+    } finally {
+      // setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -164,3 +202,13 @@ export default function ContactForm() {
     </div>
   );
 }
+
+const Page = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ContactContent />
+    </Suspense>
+  );
+};
+
+export default Page;

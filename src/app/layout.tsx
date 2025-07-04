@@ -4,6 +4,9 @@ import "./globals.css";
 import Header from "./components/UI/Header";
 import { Providers } from "./providers";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const ubuntu = Ubuntu({
   weight: ["300", "400", "500", "700"],
   variable: "--font-ubuntu",
@@ -28,6 +31,18 @@ export default function RootLayout({
             <Header></Header>
             {children}
           </Providers>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </body>
       </>
     </html>

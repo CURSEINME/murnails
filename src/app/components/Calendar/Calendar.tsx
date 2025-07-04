@@ -7,6 +7,7 @@ const Calendar: React.FC<CalendarProps> = ({
   onDateSelect,
   currentMonth,
   onMonthChange,
+  dateSlots
 }) => {
   return (
     <div className="bg-neutral-800/70 rounded-xl shadow-xl  p-4 sm:px-6 lg:px-8">
@@ -18,6 +19,7 @@ const Calendar: React.FC<CalendarProps> = ({
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateSelect={onDateSelect}
+        dateSlots={dateSlots}
       />
     </div>
   );

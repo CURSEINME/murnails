@@ -6,18 +6,30 @@ interface CalendarGridProps {
   currentMonth: Date;
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
+  dateSlots: Date[];
 }
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({
   currentMonth,
   selectedDate,
   onDateSelect,
+  dateSlots,
 }) => {
   const calendar = generateCalendar(
     currentMonth.getFullYear(),
     currentMonth.getMonth(),
     selectedDate
   );
+
+  const hasSlotsOnDate = (date: Date | null) => {
+    if (!date) return false;
+    return dateSlots.some(
+      (slotDate) =>
+        slotDate.getDate() === date.getDate() &&
+        slotDate.getMonth() === date.getMonth() &&
+        slotDate.getFullYear() === date.getFullYear()
+    );
+  };
 
   return (
     <div className="grid grid-cols-7 gap-1 mb-4">
@@ -32,9 +44,17 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
       {calendar.map((week, i) => (
         <React.Fragment key={i}>
-          {week.map((dayInfo, j) => (
-            <DayCell key={j} dayInfo={dayInfo} onSelect={onDateSelect} />
-          ))}
+          {week.map((dayInfo, j) => {
+            const hasSlots = hasSlotsOnDate(dayInfo.date);
+            return (
+              <DayCell
+                key={j}
+                dayInfo={dayInfo}
+                onSelect={onDateSelect}
+                hasAvailableSlots={hasSlots}
+              />
+            );
+          })}
         </React.Fragment>
       ))}
     </div>

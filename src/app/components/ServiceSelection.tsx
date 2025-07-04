@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { IoTime } from "react-icons/io5";
@@ -70,12 +69,6 @@ const services: Service[] = [
 ];
 
 const ServiceSelection = () => {
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-
-  const handleSelectService = (serviceId: string) => {
-    setSelectedService(serviceId);
-  };
-
   return (
     <div className="mt-5 flex flex-col items-center px-4 sm:px-6 lg:px-8">
       {/* Заголовок */}
@@ -85,18 +78,12 @@ const ServiceSelection = () => {
         </p>
       </div>
 
-      {/* Список услуг */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map((service) => (
           <Link href={`/calendar?service=${service.name}`} key={service.id}>
             <motion.div
               whileHover={{ scale: 1.03 }}
-              onClick={() => handleSelectService(service.id)}
-              className={`rounded-xl h-[400px] cursor-pointer transition-all border-2 ${
-                selectedService === service.id
-                  ? "border-pink-500 bg-zinc-900"
-                  : "border-neutral-700 bg-zinc-700/50 hover:border-pink-500 hover:bg-zinc-900"
-              }`}
+              className={`rounded-xl h-[400px] cursor-pointer transition-all border-2 ${"border-neutral-700 bg-neutral-800/70 hover:border-pink-500 hover:bg-zinc-900"}`}
             >
               <div className="h-48 overflow-hidden">
                 <Image

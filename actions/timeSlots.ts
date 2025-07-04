@@ -15,10 +15,14 @@ export async function createTimeSlot({
     });
     console.log(res);
     return res;
-    return;
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getDateSlots() {
+  const res = await prisma.timeSlot.findMany();
+  return res.map((r) => r.date);
 }
 
 export async function getTimeSlots(date: Date) {
@@ -37,7 +41,6 @@ export async function deleteTimeSlot({
     const res = await prisma.timeSlot.deleteMany({
       where: { date: date, time: time },
     });
-    console.log(res);
     return res;
   } catch (error) {
     console.log(error);

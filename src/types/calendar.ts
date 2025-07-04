@@ -15,4 +15,10 @@ export interface CalendarProps {
   onDateSelect: (date: Date) => void;
   currentMonth: Date;
   onMonthChange: (date: Date) => void;
+  dateSlots: Date[];
+}
+export interface DayCellProps {
+  dayInfo: DateInfo;
+  onSelect: (date: Date) => void;
+  hasAvailableSlots: boolean;
 }

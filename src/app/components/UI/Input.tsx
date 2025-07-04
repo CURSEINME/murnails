@@ -19,7 +19,7 @@ const Input: React.FC<InputProps> = ({
     <div className="flex flex-col">
       {label && (
         <label
-          className={`text-sm font-medium mb-1 text-pink-300 ${labelClassName}`}
+          className={`text-sm font-medium mb-1 text-pink-400 ${labelClassName}`}
         >
           {label}
         </label>
@@ -28,7 +28,7 @@ const Input: React.FC<InputProps> = ({
         type={type}
         value={value}
         onChange={onChange}
-        className={`p-2 border border-gray-600 rounded-lg bg-gray-700 text-white 
+        className={`p-2 border border-gray-600 rounded-lg bg-neutral-800/70 text-white 
           focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none
           transition-shadow duration-200 ${className}`}
       />
