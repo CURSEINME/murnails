@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
 
 interface TimeSlotItemProps {
   time: string;
@@ -27,14 +27,13 @@ const TimeSlotItem: React.FC<TimeSlotItemProps> = ({
   return (
     <div
       onClick={handleSelectTime}
-      className={`border border-neutral-700 rounded-lg p-3 flex justify-between items-center bg-neutral-700/70 hover:bg-gray-700 transition-colors
-        ${time === selectedTime ? "bg-pink-500" : ""}`}
+      className={`flex items-center justify-between rounded-lg border border-neutral-700 bg-neutral-700/70 p-3 transition-colors hover:bg-gray-700 ${time === selectedTime ? 'bg-pink-500' : ''}`}
     >
       <span className="text-gray-200">{time}</span>
       {session?.user && (
         <button
           onClick={handleRemoveTime}
-          className="text-pink-500 hover:text-pink-400 text-xl font-bold transition-colors"
+          className="text-xl font-bold text-pink-500 transition-colors hover:text-pink-400"
           title="Удалить"
         >
           ×

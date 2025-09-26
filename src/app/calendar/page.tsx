@@ -62,7 +62,7 @@ function CalendarContent() {
         />
       </div>
 
-      <div className="bg-neutral-800/70 rounded-xl shadow-xl p-6">
+      <div className="bg-neutral-800/40 rounded-xl shadow-xl p-6">
         {selectedDate ? (
           <div className={`h-full flex flex-col`}>
             <h2 className="text-xl font-bold text-pink-400 mb-6">

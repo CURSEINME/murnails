@@ -1,5 +1,5 @@
 // tailwind.config.js
-import tailwindcss from 'tailwindcss'
+import tailwindcss from "tailwindcss";
 
 export default {
   content: [
@@ -13,10 +13,10 @@ export default {
           colors: {
             primary: "rgb(59 130 246)",
             secondary: "rgb(16 185 129)",
-            accent: "rgb(139 92 246)"
-          }
-        }
-      }
-    })
-  ]
-}
+            accent: "rgb(139 92 246)",
+          },
+        },
+      },
+    }),
+  ],
+};
