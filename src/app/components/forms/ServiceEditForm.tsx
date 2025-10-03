@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Service } from "@prisma/client";
-import { CreateServiceFormValues, serviceSchema } from "@/lib/zodSchemes";
-import { updateServiceAction } from "../../../../actions/services";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Service } from '@prisma/client';
+import { CreateServiceFormValues, serviceSchema } from '@/lib/zodSchemes';
+import { updateServiceAction } from '../../../../actions/services';
+import { motion } from 'framer-motion';
+import Button from '../UI/Button';
 
 interface Props {
   service: Service;
@@ -25,7 +26,8 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
     defaultValues: service,
   });
 
-  const watchImage = watch("serviceImage");
+  const watchImage = watch('serviceImage');
+  console.log(service);
 
   const onSubmit = async (data: CreateServiceFormValues) => {
     const updated = await updateServiceAction({
@@ -39,91 +41,98 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
     onClose();
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setValue("serviceImage", file);
+    setValue('serviceImage', file);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-neutral-900 p-6 rounded-xl w-96 flex flex-col gap-3"
-      >
-        <h2 className="text-lg font-bold text-pink-400">
-          Редактировать услугу
-        </h2>
+    <motion.form
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.25 }}
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-[400px] flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-xl backdrop-blur-md"
+    >
+      <h2 className="text-center text-xl font-bold text-pink-400">✏️ Редактировать услугу</h2>
 
+      {/* Название */}
+      <div>
         <input
-          {...register("title")}
+          {...register('title')}
           placeholder="Название"
-          className="p-2 rounded bg-neutral-800 text-white"
+          className="w-full rounded-xl border border-white/20 bg-white/10 p-3 text-white placeholder-gray-400 focus:border-pink-400 focus:outline-none"
         />
-        {errors.title && (
-          <span className="text-red-500 text-sm">{errors.title.message}</span>
-        )}
+        {errors.title && <span className="text-sm text-red-400">{errors.title.message}</span>}
+      </div>
 
+      {/* Длительность */}
+      <div>
         <input
-          {...register("time")}
-          placeholder="Длительность"
-          className="p-2 rounded bg-neutral-800 text-white"
+          {...register('time')}
+          placeholder="Длительность (например: 1ч 30м)"
+          className="w-full rounded-xl border border-white/20 bg-white/10 p-3 text-white placeholder-gray-400 focus:border-pink-400 focus:outline-none"
         />
-        {errors.time && (
-          <span className="text-red-500 text-sm">{errors.time.message}</span>
-        )}
+        {errors.time && <span className="text-sm text-red-400">{errors.time.message}</span>}
+      </div>
 
+      {/* Цена */}
+      <div>
         <input
-          {...register("price")}
+          {...register('price')}
           placeholder="Цена"
-          className="p-2 rounded bg-neutral-800 text-white"
+          className="w-full rounded-xl border border-white/20 bg-white/10 p-3 text-white placeholder-gray-400 focus:border-pink-400 focus:outline-none"
         />
-        {errors.price && (
-          <span className="text-red-500 text-sm">{errors.price.message}</span>
-        )}
+        {errors.price && <span className="text-sm text-red-400">{errors.price.message}</span>}
+      </div>
 
+      {/* Описание */}
+      <div>
         <textarea
-          {...register("description")}
-          placeholder="Описание"
-          className="p-2 rounded bg-neutral-800 text-white"
+          {...register('description')}
+          placeholder="Описание услуги"
+          className="min-h-[80px] w-full rounded-xl border border-white/20 bg-white/10 p-3 text-white placeholder-gray-400 focus:border-pink-400 focus:outline-none"
         />
         {errors.description && (
-          <span className="text-red-500 text-sm">
-            {errors.description.message}
-          </span>
+          <span className="text-sm text-red-400">{errors.description.message}</span>
         )}
+      </div>
 
+      {/* Картинка */}
+      <div>
         <input
-          {...register("serviceImage")}
+          {...register('serviceImage')}
           type="file"
           onChange={handleFileChange}
+          className="text-sm text-gray-300"
         />
 
-        {watchImage && (
+        {/* {watchImage && (
           <img
             src={
-              typeof watchImage === "string"
+              typeof watchImage === 'string'
                 ? watchImage
-                : URL.createObjectURL(watchImage)
+                : watchImage instanceof File
+                  ? URL.createObjectURL(watchImage)
+                  : ''
             }
-            className="h-24 w-24 object-cover rounded"
+            className="mt-2 h-24 w-24 rounded-xl border border-white/20 object-cover"
             alt="preview"
           />
-        )}
+        )} */}
+      </div>
 
-        <div className="flex justify-end gap-2 mt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-3 py-1 bg-gray-700 rounded"
-          >
-            Отмена
-          </button>
-          <button type="submit" className="px-3 py-1 bg-pink-500 rounded">
-            Сохранить
-          </button>
-        </div>
-      </form>
-    </div>
+      {/* Кнопки */}
+      <div className="mt-4 flex justify-end gap-3">
+        <Button variant="secondary" type="button" onClick={onClose}>
+          Отменить
+        </Button>
+        <Button type="submit" variant="primary">
+          Сохранить
+        </Button>
+      </div>
+    </motion.form>
   );
 }
