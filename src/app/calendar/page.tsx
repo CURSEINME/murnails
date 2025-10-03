@@ -81,7 +81,7 @@ function CalendarContent() {
             {selectedTime && (
               <Button
                 onClick={handleClick}
-                variant="secondary"
+                variant="primary"
                 type="button"
                 className="mt-10"
               >
