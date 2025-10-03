@@ -1,13 +1,11 @@
-"use client";
-
+import { prisma } from "@/lib/prisma";
 import ServiceSelection from "../components/ServiceSelection";
 
-const Page = () => {
+export default async function ServicesPage() {
+  const services = await prisma.service.findMany();
   return (
     <div>
-      <ServiceSelection />
+      <ServiceSelection services={services} />
     </div>
   );
-};
-
-export default Page;
+}

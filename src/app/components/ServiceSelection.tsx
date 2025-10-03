@@ -1,127 +1,55 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { IoTime } from "react-icons/io5";
 import Link from "next/link";
+import { Service } from "@prisma/client";
+import ServiceCreateForm from "./forms/SerivceCreateForm";
+import Modal from "./UI/Modal";
+import ServiceEditForm from "./forms/ServiceEditForm";
+import ServiceCard from "./ServiceCard";
 
-interface Service {
-  id: string;
-  name: string;
-  duration: string;
-  price: string;
-  description: string;
-  image: string;
-}
 
-const services: Service[] = [
-  {
-    id: "1",
-    name: "Пакет XS",
-    duration: "30 минут",
-    price: "700",
-    description:
-      "Гигиенический маникюр - обработка ногтевой пластины (без снятия и последующего покрытия)",
-    image: "/xs-package.jpg",
-  },
-  {
-    id: "2",
-    name: "Пакет S",
-    duration: "45 минут",
-    price: "900",
-    description: "Снятие - гигиенический маникюр (без последующего покрытия)",
-    image: "/xs-package.jpg",
-  },
-  {
-    id: "3",
-    name: "Пакет M",
-    duration: "1 час 30 минут",
-    price: "1300",
-    description: "Гигиенический маникюр | укрепление | однотонное покрытие",
-    image: "/m-package.jpg",
-  },
-  {
-    id: "4",
-    name: "Пакет L",
-    duration: "2 часа",
-    price: "1500",
-    description:
-      "Снятие | гигиенический маникюр | укрепление | однотонное покрытие",
-    image: "/l-package.jpg",
-  },
-  {
-    id: "5",
-    name: "Мужской маникюр",
-    duration: "40 минут",
-    price: "900",
-    description: "Гигиенический маникюр + спа уход",
-    image: "/man-manic.jpg",
-  },
-  {
-    id: "6",
-    name: "Моделирование",
-    duration: "2-2.5 часа",
-    price: "от 1800",
-    description:
-      "Снятие + гигиенический маникюр + укрепление/восстановление архитектуры/переход из одной формы в другую + однотонное покрытие",
-    image: "/fate1.jpg",
-  },
-];
+const ServiceSelection = ({ services }: { services: Service[] }) => {
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [creatingService, setCreatingService] = useState(false);
 
-const ServiceSelection = () => {
+  const [servicesState, setServicesState] = useState(services || []);
+
+  const handleSave = (updated: Service) => {
+    setServicesState((prev) =>
+      prev.map((s) => (s.id === updated.id ? updated : s))
+    );
+    setEditingService(null);
+  };
+
   return (
-    <div className="mt-5 flex flex-col items-center px-4 sm:px-6 lg:px-8">
-      {/* Заголовок */}
-      <div className="text-center mb-10">
-        <p className="text-2xl font-bold text-pink-400">
-          Выберите услугу и запишитесь онлайн
-        </p>
+    <>
+      <div className="mt-5 flex flex-col items-center px-4 sm:px-6 lg:px-8">
+        {/* Заголовок */}
+        <div className="text-center mb-10">
+          <p className="text-2xl font-bold text-pink-400">
+            Выберите услугу и запишитесь онлайн
+          </p>
+          <button
+          onClick={() => setCreatingService(true)}
+          className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition"
+        >
+          ➕ Создать сервис
+        </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {servicesState.map((service) => (
+            <ServiceCard onEdit={setEditingService} service={service} key={service.id}/>
+          ))}
+        </div>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {services.map((service) => (
-          <Link href={`/calendar?service=${service.name}`} key={service.id}>
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className={`rounded-xl h-[400px] cursor-pointer transition-all border-2 ${"border-neutral-700 bg-neutral-800/70 hover:border-pink-500 hover:bg-zinc-900"}`}
-            >
-              <div className="h-48 overflow-hidden">
-                <Image
-                  src={service.image}
-                  alt={service.name}
-                  width={300}
-                  height={300}
-                  className="mx-auto rounded-t-xl h-full w-full object-cover"
-                />
-              </div>
-              <div className="p-5 h-1/2 flex flex-col">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-100 mt-1">
-                      {service.name}
-                    </h3>
-                  </div>
-                </div>
-
-                <p className="text-gray-400 mt-2 text-sm">
-                  {service.description}
-                </p>
-
-                <div className="flex justify-between items-center mt-auto">
-                  <div className=" text-gray-400 flex items-center gap-2">
-                    <IoTime className="text-gray-400 h-[1em] w-[1em] flex-none" />
-                    <div>{service.duration}</div>
-                  </div>
-                  <span className="bg-pink-500/10 text-pink-400 px-3 py-1 rounded-full text-sm font-medium">
-                    {service.price} ₽
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </Link>
-        ))}
-      </div>
-    </div>
+      {creatingService && <Modal onClose={() => setCreatingService(false)}>{<ServiceCreateForm onClose={() => setCreatingService(false)} />}</Modal>}
+      {editingService && <Modal onClose={() => setEditingService(null)}>{<ServiceEditForm onUpdate={handleSave} service={editingService} onClose={() => setEditingService(null)} />}</Modal>}
+    </>
   );
 };
 
