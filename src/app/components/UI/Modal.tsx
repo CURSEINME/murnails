@@ -1,15 +1,18 @@
 interface ModalProps {
   children: React.ReactNode;
+  overlayClassName?: string;
   onClose: () => void;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
+export default function Modal({ children, onClose, overlayClassName }: ModalProps) {
   return (
     <div
       onClick={onClose}
-      className="fixed top-0 left-0 w-screen h-screen bg-black/50 bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-2 md:px-5"
     >
-      <div onClick={(e) => e.stopPropagation()}>{children}</div>
+      <div className={overlayClassName} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
     </div>
   );
 }
