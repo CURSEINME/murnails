@@ -27,7 +27,6 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
   });
 
   const watchImage = watch('serviceImage');
-  console.log(service);
 
   const onSubmit = async (data: CreateServiceFormValues) => {
     const updated = await updateServiceAction({
@@ -42,7 +41,7 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    if (!e.target.files?.[0]) return;
     const file = e.target.files[0];
     setValue('serviceImage', file);
   };
@@ -54,7 +53,7 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.25 }}
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-[400px] flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-xl backdrop-blur-md"
+      className="w-full flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-xl backdrop-blur-md"
     >
       <h2 className="text-center text-xl font-bold text-pink-400">✏️ Редактировать услугу</h2>
 
@@ -103,13 +102,13 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
       {/* Картинка */}
       <div>
         <input
-          {...register('serviceImage')}
-          type="file"
           onChange={handleFileChange}
+          type="file"
+          accept="image/*"
           className="text-sm text-gray-300"
         />
 
-        {/* {watchImage && (
+        {watchImage && (
           <img
             src={
               typeof watchImage === 'string'
@@ -118,10 +117,10 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
                   ? URL.createObjectURL(watchImage)
                   : ''
             }
-            className="mt-2 h-24 w-24 rounded-xl border border-white/20 object-cover"
+            className="mt-2 h-48 w-full rounded-xl border border-white/20 object-cover"
             alt="preview"
           />
-        )} */}
+        )}
       </div>
 
       {/* Кнопки */}
