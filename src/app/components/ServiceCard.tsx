@@ -1,10 +1,11 @@
-"use client";
-import { Service } from "@prisma/client";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { deleteServiceAction } from "../../../actions/services";
-import { Edit, Trash2, Clock } from "lucide-react";
+'use client';
+
+import { Service } from '@prisma/client';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { deleteServiceAction } from '../../../actions/services';
+import { Edit, Trash2, Clock } from 'lucide-react';
 
 interface Props {
   service: Service;
@@ -13,7 +14,7 @@ interface Props {
 
 export default function ServiceCard({ service, onEdit }: Props) {
   const handleDelete = (service: Service) => {
-    if (confirm("Вы действительно хотите удалить услугу?")) {
+    if (confirm('Вы действительно хотите удалить услугу?')) {
       deleteServiceAction(service);
     }
   };
@@ -22,19 +23,19 @@ export default function ServiceCard({ service, onEdit }: Props) {
     <motion.div
       key={service.id}
       whileHover={{ scale: 1.02 }}
-      className="relative rounded-2xl h-[400px] cursor-pointer transition-all border border-white/20 bg-white/10 backdrop-blur-md hover:border-pink-400/70 hover:bg-white/20 shadow-md"
+      className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-white/10 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/20"
     >
       {/* Кнопки действий */}
       <div className="absolute top-3 right-3 flex items-center gap-2">
         <button
           onClick={() => onEdit(service)}
-          className="p-2 rounded-xl bg-white/10 hover:bg-pink-500/30 transition-colors text-pink-300"
+          className="rounded-xl bg-white/10 p-2 text-pink-300 transition-colors hover:bg-pink-500/30"
         >
           <Edit size={18} />
         </button>
         <button
           onClick={() => handleDelete(service)}
-          className="p-2 rounded-xl bg-white/10 hover:bg-red-500/30 transition-colors text-red-400"
+          className="rounded-xl bg-white/10 p-2 text-red-400 transition-colors hover:bg-red-500/30"
         >
           <Trash2 size={18} />
         </button>
@@ -43,27 +44,27 @@ export default function ServiceCard({ service, onEdit }: Props) {
       {/* Контент карточки */}
       <Link href={`/calendar?service=${service.title}`}>
         <div className="h-48 overflow-hidden rounded-t-2xl">
-          <Image
-            src={service.serviceImage}
-            alt={service.title}
-            width={300}
-            height={300}
-            className="mx-auto h-full w-full object-cover"
-          />
+          {service.serviceImage.length > 0 ? (
+            <Image
+              src={service.serviceImage}
+              alt={service.title}
+              width={300}
+              height={300}
+              className="mx-auto h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-[300px] w-[300px] items-center justify-center">No image</div>
+          )}
         </div>
-        <div className="p-5 h-1/2 flex flex-col">
-          <h3 className="text-xl font-semibold text-white/90">
-            {service.title}
-          </h3>
-          <p className="text-gray-300 mt-2 text-sm line-clamp-3">
-            {service.description}
-          </p>
-          <div className="flex justify-between items-center mt-auto">
-            <div className="text-gray-400 flex items-center gap-2 text-sm">
+        <div className="flex h-1/2 flex-col p-5">
+          <h3 className="text-xl font-semibold text-white/90">{service.title}</h3>
+          <p className="mt-2 line-clamp-3 text-sm text-gray-300">{service.description}</p>
+          <div className="mt-auto flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
               <Clock size={16} />
               <span>{service.time}</span>
             </div>
-            <span className="bg-pink-500/10 text-pink-400 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="rounded-full bg-pink-500/10 px-3 py-1 text-sm font-medium text-pink-400">
               {service.price} ₽
             </span>
           </div>
