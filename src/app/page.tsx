@@ -1,5 +1,3 @@
-'use client';
-
 import { prisma } from '@/lib/prisma';
 import ServiceSelection from './components/ServiceSelection';
 
