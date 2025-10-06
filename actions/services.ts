@@ -7,6 +7,8 @@ import { Service } from '@prisma/client';
 import { optimizeImage } from '@/lib/sharp';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { aws, BUCKET, ENDPOINT } from '@/lib/s3Client';
+import { revalidatePath } from 'next/cache';
+import { error } from 'console';
 
 export const createServiceAction = async (data: CreateServiceFormValues) => {
   try {
@@ -49,6 +51,8 @@ export const createServiceAction = async (data: CreateServiceFormValues) => {
       },
     });
 
+    revalidatePath('/');
+
     return {
       success: true,
       message: 'Service created successfully',
@@ -78,6 +82,8 @@ export const deleteServiceAction = async (data: Service) => {
         Key: serviceImage,
       }),
     );
+
+    revalidatePath('/');
 
     return { success: true, message: 'Service deleted successfully' };
   } catch (error) {
@@ -134,6 +140,8 @@ export const updateServiceAction = async (data: CreateServiceFormValues) => {
       where: { id },
       data: { ...newData, serviceImage: imageUrl },
     });
+
+    revalidatePath('/');
 
     return {
       success: true,
