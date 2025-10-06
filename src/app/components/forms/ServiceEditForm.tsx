@@ -7,6 +7,8 @@ import { CreateServiceFormValues, serviceSchema } from '@/lib/zodSchemes';
 import { updateServiceAction } from '../../../../actions/services';
 import { motion } from 'framer-motion';
 import Button from '../UI/Button';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   service: Service;
@@ -34,7 +36,9 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
       id: service.id,
     });
 
-    if (updated.success) {
+    if (!updated.success) toast.error('Произошла ошибка!');
+    else if (updated.success) {
+      toast.success('Услуга успешно обновлена!');
       onUpdate(updated.service as Service);
     }
     onClose();
@@ -53,7 +57,7 @@ export default function ServiceEditForm({ service, onClose, onUpdate }: Props) {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.25 }}
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-xl backdrop-blur-md"
+      className="flex w-full flex-col gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-xl backdrop-blur-md"
     >
       <h2 className="text-center text-xl font-bold text-pink-400">✏️ Редактировать услугу</h2>
 

@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { CreateServiceFormValues, serviceSchema } from '@/lib/zodSchemes';
 import { createServiceAction } from '../../../../actions/services';
 import Button from '../UI/Button';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   onClose: () => void;
@@ -33,7 +35,10 @@ export default function ServiceCreateForm({ onClose }: Props) {
 
   const onSubmit = async (data: CreateServiceFormValues) => {
     const created = await createServiceAction(data);
-    if (created.success) {
+
+    if (!created.success) toast.error('Произошла ошибка!');
+    else if (created.success) {
+      toast.success('Услуга успешно создана!');
       onClose();
     }
   };

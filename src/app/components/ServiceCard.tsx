@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { deleteServiceAction } from '../../../actions/services';
 import { Edit, Trash2, Clock } from 'lucide-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   service: Service;
@@ -13,9 +15,15 @@ interface Props {
 }
 
 export default function ServiceCard({ service, onEdit }: Props) {
-  const handleDelete = (service: Service) => {
+  const handleDelete = async (service: Service) => {
     if (confirm('Вы действительно хотите удалить услугу?')) {
-      deleteServiceAction(service);
+      const res = await deleteServiceAction(service);
+
+      if (!res.success) {
+        toast.error('Произошла ошибка!');
+      } else if (res.success) {
+        toast.success('Услуга успешно удалена!');
+      }
     }
   };
 
