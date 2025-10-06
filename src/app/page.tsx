@@ -1,11 +1,13 @@
 'use client';
 
-import Image from 'next/image';
+import { prisma } from '@/lib/prisma';
+import ServiceSelection from './components/ServiceSelection';
 
-export default function Home() {
+export default async function Home() {
+  const services = await prisma.service.findMany();
   return (
-    <div className="flex h-[calc(100vh-84px)] items-center justify-center">
-      <div className="relative h-96 w-96"></div>
+    <div className="mx-auto max-w-[1400px] px-2 md:px-5">
+      <ServiceSelection services={services} />
     </div>
   );
 }

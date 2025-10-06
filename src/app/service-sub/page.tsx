@@ -1,10 +1,10 @@
-import { prisma } from "@/lib/prisma";
-import ServiceSelection from "../components/ServiceSelection";
+import { prisma } from '@/lib/prisma';
+import ServiceSelection from '../components/ServiceSelection';
 
 export default async function ServicesPage() {
   const services = await prisma.service.findMany();
   return (
-    <div className='max-w-[1400px] px-2 md:px-5 mx-auto'>
+    <div className="mx-auto max-w-[1400px] px-2 md:px-5">
       <ServiceSelection services={services} />
     </div>
   );

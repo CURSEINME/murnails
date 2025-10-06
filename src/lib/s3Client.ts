@@ -1,9 +1,10 @@
 import { S3Client } from '@aws-sdk/client-s3';
 
-const REGION = process.env.REGION;
-const AWS_KEY_ID = process.env.AWS_KEY_ID;
-const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
-const ENDPOINT = process.env.ENDPOINT;
+export const REGION = process.env.REGION;
+export const AWS_KEY_ID = process.env.AWS_KEY_ID;
+export const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
+export const ENDPOINT = process.env.ENDPOINT;
+export const BUCKET = process.env.BUCKET_NAME;
 
 if (!REGION) {
   throw new Error('REGION environment variable is not set.');

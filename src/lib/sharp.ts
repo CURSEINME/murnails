@@ -2,12 +2,12 @@ import sharp from 'sharp';
 
 export async function optimizeImage(buffer: Buffer) {
   const processed = await sharp(buffer)
-    .rotate() // auto-fix orientation from EXIF
+    .rotate()
     .resize({
-      width: 1200, // limit max width
+      width: 1200,
       withoutEnlargement: true,
     })
-    .webp({ quality: 80 }) // convert to WebP for best compression
+    .webp({ quality: 80 })
     .toBuffer();
 
   return processed;
