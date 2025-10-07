@@ -8,6 +8,7 @@ import { deleteServiceAction } from '../../../actions/services';
 import { Edit, Trash2, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   service: Service;
@@ -15,6 +16,10 @@ interface Props {
 }
 
 export default function ServiceCard({ service, onEdit }: Props) {
+  const { data: session, status } = useSession();
+
+  console.log(session, status);
+
   const handleDelete = async (service: Service) => {
     if (confirm('Вы действительно хотите удалить услугу?')) {
       const res = await deleteServiceAction(service);
@@ -34,20 +39,22 @@ export default function ServiceCard({ service, onEdit }: Props) {
       className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-white/10 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/20"
     >
       {/* Кнопки действий */}
-      <div className="absolute top-3 right-3 flex items-center gap-2">
-        <button
-          onClick={() => onEdit(service)}
-          className="rounded-xl bg-white/10 p-2 text-pink-300 transition-colors hover:bg-pink-500/30"
-        >
-          <Edit size={18} />
-        </button>
-        <button
-          onClick={() => handleDelete(service)}
-          className="rounded-xl bg-white/10 p-2 text-red-400 transition-colors hover:bg-red-500/30"
-        >
-          <Trash2 size={18} />
-        </button>
-      </div>
+      {status === 'authenticated' && session?.user?.role === 'admin' && (
+        <div className="absolute top-3 right-3 flex items-center gap-2">
+          <button
+            onClick={() => onEdit(service)}
+            className="rounded-xl bg-white/10 p-2 text-pink-300 transition-colors hover:bg-pink-500/30"
+          >
+            <Edit size={18} />
+          </button>
+          <button
+            onClick={() => handleDelete(service)}
+            className="rounded-xl bg-white/10 p-2 text-red-400 transition-colors hover:bg-red-500/30"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+      )}
 
       {/* Контент карточки */}
       <Link href={`/calendar?service=${service.title}`}>

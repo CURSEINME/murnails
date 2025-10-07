@@ -12,12 +12,9 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log(credentials?.email, process.env.ADMIN_LOGIN)
-        console.log(credentials?.password, process.env.ADMIN_PASS)
         if (
-
-          (credentials?.email === process.env.ADMIN_LOGIN &&
-            credentials?.password === process.env.ADMIN_PASS)
+          credentials?.email === process.env.ADMIN_LOGIN &&
+          credentials?.password === process.env.ADMIN_PASS
         ) {
           return { id: 'admin', name: 'Admin', role: 'admin' };
         }
