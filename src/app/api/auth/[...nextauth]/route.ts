@@ -1,21 +1,46 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
-import type { AuthOptions } from "next-auth";
+import NextAuth from 'next-auth';
 
-const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+
+export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials) {
+        console.log(credentials?.email, process.env.ADMIN_LOGIN)
+        console.log(credentials?.password, process.env.ADMIN_PASS)
+        if (
+
+          (credentials?.email === process.env.ADMIN_LOGIN &&
+            credentials?.password === process.env.ADMIN_PASS)
+        ) {
+          return { id: 'admin', name: 'Admin', role: 'admin' };
+        }
+        return null;
+      },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/login',
+  },
+  session: {
+    strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.role = user.role as string;
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.role = token.role as string;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
