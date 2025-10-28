@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import Input from "../UI/Input";
-import Button from "../UI/Button";
-import TimeSlotsList from "./TimeSlotsList";
-import {
-  createTimeSlot,
-  deleteTimeSlot,
-  getTimeSlots,
-} from "../../../../actions/timeSlots";
-import { useSession } from "next-auth/react";
+'use client';
+
+import { useState, useEffect } from 'react';
+import Button from '../UI/Button';
+import TimeSlotsList from './TimeSlotsList';
+import { createTimeSlot, deleteTimeSlot, getTimeSlots } from '../../../../actions/timeSlots';
+import { useSession } from 'next-auth/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, X } from 'lucide-react';
+import Modal from '../UI/Modal';
 
 interface TimeSlotsAdminProps {
   selectedDate: Date | null;
@@ -20,9 +20,9 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
   selectedTime,
   setSelectedTime,
 }) => {
-  const [newTime, setNewTime] = useState("");
+  const [newTime, setNewTime] = useState('');
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
-
+  const [showSheet, setShowSheet] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -37,77 +37,103 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
 
   const addTimeSlot = async () => {
     if (!newTime || !selectedDate) return;
-
-    // setIsLoading(true);
-    // setError(null);
-
     try {
-      await createTimeSlot({
-        date: selectedDate,
-        time: newTime,
-      });
-
-      const updatedSlots = [...timeSlots, newTime].sort();
-      setTimeSlots(updatedSlots);
-      setNewTime("");
+      await createTimeSlot({ date: selectedDate, time: newTime });
+      setTimeSlots((prev) => [...prev, newTime].sort());
+      setNewTime('');
+      setShowSheet(false);
     } catch (err) {
-      // setError("Не удалось добавить временной слот");
-      console.error("Error creating time slot:", err);
-    } finally {
-      // setIsLoading(false);
+      console.error('Error creating time slot:', err);
     }
   };
 
   const removeTimeSlot = async (time: string) => {
     if (!selectedDate) return;
-    // setIsLoading(true);
-    // setError(null);
-
     try {
-      await deleteTimeSlot({
-        date: selectedDate,
-        time,
-      });
-
-      const updatedSlots = timeSlots.filter((t) => t !== time);
-      setTimeSlots(updatedSlots);
+      await deleteTimeSlot({ date: selectedDate, time });
+      setTimeSlots((prev) => prev.filter((t) => t !== time));
     } catch (err) {
-      console.error("Error deleting time slot:", err);
-    } finally {
-      // setIsLoading(false);
+      console.error('Error deleting time slot:', err);
     }
   };
 
   return (
-    <div className="mt-6">
-      {session?.user && (
-        <>
-          <h3 className="text-lg font-semibold mb-2 text-pink-400">
-            Управление временными слотами
-          </h3>
-
-          <div className="mb-4 p-3 bg-neutral-900/70 rounded-lg border border-gray-700">
-            <div className="flex space-x-2 items-end">
-              <Input
-                type="time"
-                value={newTime}
-                onChange={(e) => setNewTime(e.target.value)}
-                label="Новое время"
-              />
-              <Button onClick={addTimeSlot} variant="primary">
-                Добавить
-              </Button>
-            </div>
-          </div>
-        </>
-      )}
-
+    <div className="relative mt-8">
       <TimeSlotsList
         timeSlots={timeSlots}
         onRemove={removeTimeSlot}
         selectedTime={selectedTime}
         onTimeSelect={setSelectedTime}
       />
+
+      {session?.user && (
+        <>
+          {/* Floating Action Button */}
+          <motion.button
+            onClick={() => setShowSheet(true)}
+            whileTap={{ scale: 0.9 }}
+            className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
+          >
+            <Plus size={28} />
+          </motion.button>
+
+          {/* Bottom Sheet */}
+          <AnimatePresence>
+            {showSheet && (
+              <>
+                {/* Dimmed background */}
+                <motion.div
+                  className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+                  initial={{ opacity: 0 }}
+                  onClick={() => setShowSheet(false)}
+                />
+
+                {/* Sheet panel */}
+                <Modal overlayClassName="max-w-md w-full" onClose={() => setShowSheet(false)}>
+                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center md:left-1/2 md:w-[420px] md:-translate-x-1/2">
+                    <button
+                      onClick={() => setShowSheet(false)}
+                      className="absolute top-4 right-6 text-gray-400 transition-colors hover:text-pink-400"
+                    >
+                      <X size={26} />
+                    </button>
+
+                    <h3 className="mb-2 text-lg font-semibold text-pink-400">Добавить слот</h3>
+
+                    {selectedDate && (
+                      <p className="mb-6 text-sm text-gray-400">
+                        {selectedDate.toLocaleDateString('ru-RU', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}
+                      </p>
+                    )}
+
+                    {/* Glass Input */}
+                    <div className="mb-6 w-full max-w-sm">
+                      <label className="mb-2 block text-sm text-gray-400">Выберите время</label>
+                      <div className="relative">
+                        <input
+                          type="time"
+                          value={newTime}
+                          onChange={(e) => setNewTime(e.target.value)}
+                          className="w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-center text-xl text-white transition-all duration-200 outline-none focus:border-pink-400 focus:bg-white/20"
+                        />
+                        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 blur-sm"></div>
+                      </div>
+                    </div>
+
+                    <Button onClick={addTimeSlot} variant="primary" className="w-full max-w-sm">
+                      Добавить
+                    </Button>
+                  </div>
+                </Modal>
+              </>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </div>
   );
 };

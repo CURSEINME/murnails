@@ -10,7 +10,7 @@ const Calendar: React.FC<CalendarProps> = ({
   dateSlots
 }) => {
   return (
-    <div className="bg-neutral-800/40 rounded-xl shadow-xl  p-4 sm:px-6 lg:px-8">
+    <div className="">
       <CalendarHeader
         currentMonth={currentMonth}
         onMonthChange={onMonthChange}

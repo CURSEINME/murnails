@@ -28,10 +28,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         {getMonthName(currentMonth)}
       </h2>
       <div className="flex space-x-2">
-        <Button onClick={handlePrevMonth} variant="primary">
+        <Button onClick={handlePrevMonth} variant="ghost">
           &lt;
         </Button>
-        <Button onClick={handleNextMonth} variant="primary">
+        <Button onClick={handleNextMonth} variant="ghost">
           &gt;
         </Button>
       </div>

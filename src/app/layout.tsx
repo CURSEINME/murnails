@@ -6,6 +6,7 @@ import { Providers } from './providers';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LiquidChrome from '../components/LiquidChrome'
 import Background from './components/Background';
 
 const ubuntu = Ubuntu_Sans({
@@ -29,7 +30,7 @@ export default function RootLayout({
       <>
         <body className={`${ubuntu.className} relative antialiased`}>
           <Providers>
-            {/* <Header></Header> */}
+            <Header></Header>
             {children}
             <Background />
           </Providers>
