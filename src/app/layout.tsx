@@ -6,8 +6,7 @@ import { Providers } from './providers';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LiquidChrome from '../components/LiquidChrome'
-import Background from './components/Background';
+import { BackgroundWrapper } from './components/BackgroundWrapper';
 
 const ubuntu = Ubuntu_Sans({
   weight: ['300', '400', '500', '700'],
@@ -26,14 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-screen">
       <>
-        <body className={`${ubuntu.className} relative antialiased`}>
-          <Providers>
-            <Header></Header>
-            {children}
-            <Background />
-          </Providers>
+        <body className={`${ubuntu.className} relative antialiased overflow-hidden h-screen`}>
+          <BackgroundWrapper/>
+          <div className="absolute inset-0 z-10 flex flex-col">
+            <Providers>
+              <div className="flex-1 overflow-y-auto">
+              <Header></Header>
+                {children}
+              </div>
+            </Providers>
+          </div>
           <ToastContainer
             position="top-center"
             autoClose={5000}

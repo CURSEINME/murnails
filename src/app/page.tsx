@@ -1,11 +1,10 @@
-"use client";
-
+'use client'
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <main className="">
-      <div className="">
 
         {/* HERO SECTION */}
         <section className="flex flex-col justify-center items-center text-center h-screen px-6">
@@ -56,34 +55,6 @@ export default function Home() {
           </motion.p>
         </section>
 
-        {/* SERVICES SECTION */}
-        <section id="services" className="py-32 px-6 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl font-semibold mb-12 text-cyan-400"
-          >
-            Услуги
-          </motion.h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              { title: "Веб-дизайн", desc: "Создание визуально привлекательных UI/UX интерфейсов." },
-              { title: "Разработка", desc: "Современные сайты на Next.js и Tailwind CSS." },
-              { title: "Брендинг", desc: "Формирование уникального визуального стиля компании." },
-            ].map((service, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.05 }}
-                className="p-8 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg"
-              >
-                <h3 className="text-2xl font-bold mb-3 text-white">{service.title}</h3>
-                <p className="text-gray-300">{service.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
         {/* PORTFOLIO SECTION */}
         <section id="portfolio" className="py-32 px-6 text-center">
           <motion.h2
@@ -95,13 +66,19 @@ export default function Home() {
             Портфолио
           </motion.h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[1, 2, 3].map((item) => (
+            {[1, 2, 3, 4, 5, 6].map((item) => (
               <motion.div
                 key={item}
                 whileHover={{ scale: 1.05 }}
                 className="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 overflow-hidden shadow-xl"
               >
-                <div className="h-48 bg-gradient-to-br from-cyan-500/30 to-blue-500/30"></div>
+                <Image
+                  src={`/fate${item > 5 ? 5 : item}.jpg`}
+                  alt={`Portfolio item ${item}`}
+                  width={400}
+                  height={400}
+                  className="w-full h-48 object-cover"
+                />
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">Проект #{item}</h3>
                   <p className="text-gray-300">Современный веб-дизайн в стиле Glassmorphism.</p>
@@ -109,6 +86,16 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+          <motion.a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-12 inline-block px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-lg"
+          >
+            Больше работ в нашем Instagram
+          </motion.a>
         </section>
 
         {/* CONTACT SECTION */}
@@ -155,7 +142,6 @@ export default function Home() {
         <footer className="py-10 text-center text-gray-400 text-sm border-t border-white/10">
           © {new Date().getFullYear()} Glassmorphism Studio. Все права защищены.
         </footer>
-      </div>
     </main>
   );
 }

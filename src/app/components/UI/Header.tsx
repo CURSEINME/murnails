@@ -9,7 +9,7 @@ export const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <header className="custom-container mb-10! pt-3!">
+    <header className="custom-container sticky top-5 z-50 w-full rounded-full bg-white/10 backdrop-blur-md px-4 py-2 mt-4">
       <div className="flex h-16 items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link href="/" className="text-lg font-bold text-pink-400">

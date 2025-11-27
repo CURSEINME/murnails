@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSession } from 'next-auth/react';
 
 interface Props {
-  service: Service;
+  service: Service; 
   onEdit: (service: Service) => void;
 }
 
