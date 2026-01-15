@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Ubuntu_Sans } from 'next/font/google';
 import './globals.css';
@@ -30,12 +31,14 @@ export default function RootLayout({
         <body className={`${ubuntu.className} relative antialiased overflow-hidden h-screen`}>
           <BackgroundWrapper/>
           <div className="absolute inset-0 z-10 flex flex-col">
-            <Providers>
-              <div className="flex-1 overflow-y-auto">
-              <Header></Header>
-                {children}
-              </div>
-            </Providers>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Providers>
+                <div className="flex-1 overflow-y-auto">
+                <Header></Header>
+                  {children}
+                </div>
+              </Providers>
+            </Suspense>
           </div>
           <ToastContainer
             position="top-center"

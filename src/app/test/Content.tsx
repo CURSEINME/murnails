@@ -29,9 +29,9 @@ export default async function Content({
 
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
+      {/* <Suspense fallback={<div>Loading...</div>}>
         <AnotherContent categoryId={categoryId} />
-      </Suspense>
+      </Suspense> */}
       <ul className="grid grid-cols-4 gap-5">
         {res.docs.map((user: any) => (
           <li className="flex flex-col rounded-lg border-2 border-gray-300 p-5" key={user.id}>

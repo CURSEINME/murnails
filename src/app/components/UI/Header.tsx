@@ -5,53 +5,70 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Button from './Button';
 
-export const Header = () => {
+export default function Header(){
   const { data: session } = useSession();
 
   return (
-    <header className="custom-container sticky top-5 z-50 w-full rounded-full bg-white/10 backdrop-blur-md px-4 py-2 mt-4">
-      <div className="flex h-16 items-center justify-between">
-        <div className="flex items-center space-x-8">
-          <Link href="/" className="text-lg font-bold text-pink-400">
-            Murnails
-          </Link>
-
-          <nav className="space-x-6 md:flex">
-            <Link
-              href="/service-sub"
-              className="text-gray-300 transition-colors hover:text-pink-400"
+    <header className="sticky top-4 z-50 mx-auto w-full container px-4 sm:px-6 lg:px-8">
+      <div className="rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-xl shadow-black/20">
+        <div className="flex h-14 sm:h-16 items-center justify-between px-5 sm:px-8">
+          {/* Logo + Nav */}
+          <div className="flex items-center gap-10">
+            <Link 
+              href="/" 
+              className="text-2xl font-bold tracking-tight bg-gradient-to-r from-pink-400 via-fuchsia-400 to-pink-500 bg-clip-text text-transparent"
             >
-              Услуги
+              Murnails
             </Link>
-          </nav>
-        </div>
 
-        {session ? (
-          <div className="flex items-center space-x-4">
-            <div className="hidden flex-col items-end sm:flex">
-              <span className="text-sm font-medium text-gray-200">{session.user?.name}</span>
-              <span className="text-xs text-gray-400">{session.user?.email}</span>
-            </div>
-
-            {session.user?.image && (
-              <div className="relative h-8 w-8 overflow-hidden rounded-full border-2 border-pink-500">
-                <Image src={session.user.image} alt="User avatar" fill className="object-cover" />
-              </div>
-            )}
-            <button onClick={() => signOut()}>logout</button>
+            <nav className="hidden md:flex items-center gap-8">
+              <Link href="/service-sub" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+                Услуги
+              </Link>
+              <Link href="/gallery" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+                Работы
+              </Link>
+              <Link href="/about" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+                О нас
+              </Link>
+            </nav>
           </div>
-        ) : (
-          <Button
-            type="button"
-            className="rounded-md bg-pink-600 px-4 py-2 text-white transition-colors hover:bg-pink-700"
-            onClick={() => signIn('google')}
-          >
-            Войти
-          </Button>
-        )}
+
+          {/* Auth */}
+          {session ? (
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex flex-col items-end">
+                <span className="text-sm font-medium text-zinc-200">{session.user?.name || 'Клиент'}</span>
+                <span className="text-xs text-zinc-500">{session.user?.email?.split('@')[0]}</span>
+              </div>
+
+              {session.user?.image ? (
+                <div className="relative h-9 w-9 overflow-hidden rounded-full ring-2 ring-pink-500/40 ring-offset-2 ring-offset-black">
+                  <Image src={session.user.image} alt="" fill className="object-cover" />
+                </div>
+              ) : (
+                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-pink-500 to-fuchsia-600 flex items-center justify-center text-white font-medium text-sm">
+                  {session.user?.name?.[0]?.toUpperCase() || '?'}
+                </div>
+              )}
+
+              <button
+                onClick={() => signOut()}
+                className="text-sm text-zinc-400 hover:text-pink-400 transition-colors"
+              >
+                Выйти
+              </button>
+            </div>
+          ) : (
+            <Button
+              onClick={() => signIn('google')}
+              className="rounded-full bg-gradient-to-r from-pink-600 to-fuchsia-600 px-6 py-2 text-sm font-medium text-white shadow-lg shadow-pink-500/20 hover:shadow-pink-500/30 transition-all hover:scale-[1.02]"
+            >
+              Войти
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );
 };
-
-export default Header;

@@ -1,13 +1,20 @@
 'use client'
-import { motion } from "framer-motion";
-import Image from "next/image";
+
+import GradientHero from "@/components/mvpblocks/gradient-hero";
+import TestimonialsCarousel from "@/components/mvpblocks/testimonials-carousel";
+import AboutUsSalon from "@/components/mvpblocks/about-us-1";
+import GallerySection from "./components/GallerySection";
+import MasonryGallery from "@/components/mvpblocks/masonry-grid-1";
+
+// Пример использования в компоненте:
 
 export default function Home() {
   return (
     <main className="">
 
-        {/* HERO SECTION */}
-        <section className="flex flex-col justify-center items-center text-center h-screen px-6">
+        <GradientHero/>
+
+        {/* <section className="flex flex-col justify-center items-center text-center h-screen px-6">
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -31,10 +38,9 @@ export default function Home() {
           >
             Начать проект
           </motion.button>
-        </section>
+        </section> */}
 
-        {/* ABOUT SECTION */}
-        <section id="about" className="py-32 px-6 text-center">
+        {/* <section id="about" className="py-32 px-6 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -53,10 +59,20 @@ export default function Home() {
             прозрачности и глубины. Наши проекты объединяют эстетику и функциональность,
             помогая брендам выделяться.
           </motion.p>
-        </section>
+        </section> */}
+        <AboutUsSalon/> 
 
-        {/* PORTFOLIO SECTION */}
-        <section id="portfolio" className="py-32 px-6 text-center">
+        <TestimonialsCarousel
+          title="Наши любимые отзывы"
+          subtitle="Реальные слова наших клиенток 💕"
+          autoplaySpeed={5000}
+          className="mx-auto"
+        />
+
+        {/* <GallerySection/> */}
+        <MasonryGallery/>
+
+        {/* <section id="portfolio" className="py-32 px-6 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -96,10 +112,9 @@ export default function Home() {
           >
             Больше работ в нашем Instagram
           </motion.a>
-        </section>
+        </section> */}
 
-        {/* CONTACT SECTION */}
-        <section id="contact" className="py-32 px-6 text-center">
+        {/* <section id="contact" className="py-32 px-6 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -138,10 +153,11 @@ export default function Home() {
           </motion.form>
         </section>
 
-        {/* FOOTER */}
-        <footer className="py-10 text-center text-gray-400 text-sm border-t border-white/10">
-          © {new Date().getFullYear()} Glassmorphism Studio. Все права защищены.
-        </footer>
+        <ClientOnly>
+          <footer className="py-10 text-center text-gray-400 text-sm border-t border-white/10">
+            © {new Date().getFullYear()} Glassmorphism Studio. Все права защищены.
+          </footer>
+        </ClientOnly> */}
     </main>
   );
 }

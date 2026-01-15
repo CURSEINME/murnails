@@ -1,23 +1,66 @@
-@import 'tailwindcss';
+@tailwind utilities;
+
+@import "tailwindcss";
 
 :root {
-  --background: black;
-  --foreground: white;
+  --background: oklch(0.20717 0.01233 347.53320);
+  --foreground: oklch(0.98500 0.00000 0.00000);
+  --card:       oklch(0.21027 0.01265 347.54927);
+  --card-ascent: oklch(0.46551 0.16697 356.97485);
+  --card-foreground: oklch(0.98500 0.00000 0.00000);
+  --popover:    oklch(0.20063 0.00861 347.12246);
+  --popover-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --primary:    oklch(0.46551 0.16697 356.97485);
+  --primary-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --secondary:  oklch(0.15608 0.04883 26.32718);
+  --secondary-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --accent:     oklch(0.16959 0.07429 328.92716);
+  --accent-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --destructive: oklch(0.62468 0.18903 31.23539);
+  --destructive-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --muted:      oklch(0.26222 0.01798 347.75487);
+  --muted-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --border:     oklch(0.27301 0.01411 347.34017);
+  --input:      oklch(0.27301 0.01411 347.34017);
+  --ring:       oklch(0.46551 0.16697 356.97485);
+
+  --radius: 0.75rem;
 }
 
 @theme inline {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-color: var(--card-ascent);
+  --color-card-ascent: var(--card-ascent);
+  --card-color: var(--card-color);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
 
-  --color-ultra-light-blue: #f6f6f9;
-  --color-light-blue: #00b8be;
-  --color-blue: #00b8be;
-  /* --color- */
-
-  --breakpoint-md: 1024px;
-  --breakpoint-lg: 1800px;
+/* Если нужен тёмный режим — добавляй отдельно */
+.dark {
+  /* ... свои значения ... */
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -26,6 +69,54 @@
     --foreground: #ededed;
   }
 } */
+
+
+
+.spin {
+  animation: spin 5s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+ 
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+ 
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+ 
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
 
 body {
   background: var(--background);
