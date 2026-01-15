@@ -36,7 +36,7 @@ export default function ServiceCard({ service, onEdit }: Props) {
     <motion.div
       key={service.id}
       whileHover={{ scale: 1.02 }}
-      className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-white/10 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/20"
+      className="relative h-[380px] cursor-pointer rounded-2xl border border-white/20 bg-white/10 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/20"
     >
       {/* Кнопки действий */}
       {status === 'authenticated' && session?.user?.role === 'admin' && (

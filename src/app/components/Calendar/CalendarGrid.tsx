@@ -1,6 +1,6 @@
-import { generateCalendar } from "../../../lib/calendarUtils";
-import DayCell from "./DayCell";
-import React from "react";
+import { generateCalendar } from '../../../lib/calendarUtils';
+import DayCell from './DayCell';
+import React from 'react';
 
 interface CalendarGridProps {
   currentMonth: Date;
@@ -18,7 +18,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   const calendar = generateCalendar(
     currentMonth.getFullYear(),
     currentMonth.getMonth(),
-    selectedDate
+    selectedDate,
   );
 
   const hasSlotsOnDate = (date: Date | null) => {
@@ -27,36 +27,58 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
       (slotDate) =>
         slotDate.getDate() === date.getDate() &&
         slotDate.getMonth() === date.getMonth() &&
-        slotDate.getFullYear() === date.getFullYear()
+        slotDate.getFullYear() === date.getFullYear(),
     );
   };
 
-  return (
-    <div className="grid grid-cols-7 gap-1 mb-4">
-      {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
-        <div
-          key={day}
-          className="text-center font-semibold p-2 h-10 w-10 flex items-center justify-center"
-        >
-          {day}
-        </div>
-      ))}
+  const weekDays = [
+    { short: 'Пн', full: 'Понедельник' },
+    { short: 'Вт', full: 'Вторник' },
+    { short: 'Ср', full: 'Среда' },
+    { short: 'Чт', full: 'Четверг' },
+    { short: 'Пт', full: 'Пятница' },
+    { short: 'Сб', full: 'Суббота' },
+    { short: 'Вс', full: 'Воскресенье' },
+  ];
 
-      {calendar.map((week, i) => (
-        <React.Fragment key={i}>
-          {week.map((dayInfo, j) => {
-            const hasSlots = hasSlotsOnDate(dayInfo.date);
-            return (
-              <DayCell
-                key={j}
-                dayInfo={dayInfo}
-                onSelect={onDateSelect}
-                hasAvailableSlots={hasSlots}
-              />
-            );
-          })}
-        </React.Fragment>
-      ))}
+  return (
+    <div className="relative mx-auto w-full">
+      {/* Дни недели */}
+      <div className="mb-4 grid grid-cols-7 gap-2">
+        {weekDays.map((day, index) => (
+          <div
+            key={day.short}
+            className={`flex h-10 w-10 items-center justify-center rounded-lg text-center text-xs font-semibold ${
+              index >= 5 ? 'bg-pink-500/10 text-pink-400/70' : 'bg-white/5 text-gray-400'
+            }`}
+            title={day.full}
+          >
+            {day.short}
+          </div>
+        ))}
+      </div>
+
+      {/* Сетка дней */}
+      <div className="grid grid-cols-7 gap-2">
+        {calendar.map((week, weekIndex) => (
+          <React.Fragment key={weekIndex}>
+            {week.map((dayInfo, dayIndex) => {
+              const hasSlots = hasSlotsOnDate(dayInfo.date);
+              return (
+                <DayCell
+                  key={`${weekIndex}-${dayIndex}`}
+                  dayInfo={dayInfo}
+                  onSelect={onDateSelect}
+                  hasAvailableSlots={hasSlots}
+                />
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* Декоративный элемент */}
+      <div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl bg-gradient-to-r from-pink-500/10 to-purple-500/10 blur-xl"></div>
     </div>
   );
 };

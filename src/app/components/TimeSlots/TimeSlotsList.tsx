@@ -1,46 +1,61 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import TimeSlotItem from './TimeSlotItem';
-import { use, useEffect, useRef } from 'react';
+'use client';
 
-interface TimeSlotsListProps {
+import { FC, useRef, useState, useEffect } from 'react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import TimeSlotItem from './TimeSlotItem';
+
+interface TimeSlotsSliderProps {
   timeSlots: string[];
-  onRemove: (time: string) => void;
   selectedTime: string | null;
   onTimeSelect: (time: string) => void;
+  onRemove: (time: string) => void;
 }
 
-const TimeSlotsList: React.FC<TimeSlotsListProps> = ({
+const TimeSlotsSlider: FC<TimeSlotsSliderProps> = ({
   timeSlots,
-  onRemove,
   selectedTime,
   onTimeSelect,
+  onRemove,
 }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  console.log(timeSlots);
+
   return (
-    <div className="md:grid-cols- grid grid-cols-3 gap-2">
-      <AnimatePresence mode="popLayout">
-        {timeSlots.length > 0 ? (
-          timeSlots.map((time) => (
-            <motion.div
+    <div className="relative w-full">
+      <div className="hidden md:block">
+        <div className="grid grid-cols-5 gap-2">
+          {timeSlots.map((time) => (
+            <TimeSlotItem
               key={time}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-            >
+              time={time}
+              selectedTime={selectedTime}
+              onTimeSelect={onTimeSelect}
+              onRemove={onRemove}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="relative md:hidden">
+        <div
+          className={`grid ${timeSlots.length > 6 ? 'auto-cols-[45%]' : 'auto-cols-[50%]'} grid-flow-col grid-rows-3 gap-2 overflow-x-auto px-2`}
+        >
+          {timeSlots.map((time) => (
+            <div key={time} className="flex-shrink-0">
               <TimeSlotItem
                 time={time}
-                onRemove={onRemove}
-                onTimeSelect={onTimeSelect}
                 selectedTime={selectedTime}
+                onTimeSelect={onTimeSelect}
+                onRemove={onRemove}
               />
-            </motion.div>
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-500">Нет доступных временных слотов</p>
-        )}
-      </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default TimeSlotsList;
+export default TimeSlotsSlider;

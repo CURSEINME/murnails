@@ -7,10 +7,13 @@ import Modal from './UI/Modal';
 import ServiceEditForm from './forms/ServiceEditForm';
 import ServiceCard from './ServiceCard';
 import { Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 const ServiceSelection = ({ services }: { services: Service[] }) => {
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [creatingService, setCreatingService] = useState(false);
+
+  const { data: session, status } = useSession();
 
   const [servicesState, setServicesState] = useState(services || []);
 
@@ -33,19 +36,20 @@ const ServiceSelection = ({ services }: { services: Service[] }) => {
           <p className="text-2xl font-bold text-pink-400">Выберите услугу и запишитесь онлайн</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
           {servicesState.map((service) => (
             <ServiceCard onEdit={setEditingService} service={service} key={service.id} />
           ))}
-
           {/* Карточка для создания нового сервиса */}
-          <div
-            onClick={() => setCreatingService(true)}
-            className="hidden cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-pink-400 p-6 text-center text-pink-400 transition hover:border-pink-500 hover:bg-pink-400/10 lg:flex"
-          >
-            <Plus className="h-10 w-10" />
-            <p className="mt-2 font-medium">Добавить сервис</p>
-          </div>
+          {session?.user.role == 'admin' && (
+            <div
+              onClick={() => setCreatingService(true)}
+              className="hidden cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-pink-400 p-6 text-center text-pink-400 transition hover:border-pink-500 hover:bg-pink-400/10 lg:flex"
+            >
+              <Plus className="h-10 w-10" />
+              <p className="mt-2 font-medium">Добавить сервис</p>
+            </div>
+          )}
         </div>
       </div>
       {creatingService && (

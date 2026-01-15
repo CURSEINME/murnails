@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../UI/Button';
 import TimeSlotsList from './TimeSlotsList';
 import { createTimeSlot, deleteTimeSlot, getTimeSlots } from '../../../../actions/timeSlots';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X } from 'lucide-react';
+import { Plus, Clock, Calendar } from 'lucide-react';
 import Modal from '../UI/Modal';
+import { set } from 'zod';
 
 interface TimeSlotsAdminProps {
   selectedDate: Date | null;
@@ -24,6 +25,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [showSheet, setShowSheet] = useState(false);
   const { data: session } = useSession();
+  const slotRefs = useRef(null)
 
   useEffect(() => {
     const fetchTimeSlots = async () => {
@@ -57,79 +59,125 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
     }
   };
 
-  return (
-    <div className="relative mt-8">
-      <TimeSlotsList
-        timeSlots={timeSlots}
-        onRemove={removeTimeSlot}
-        selectedTime={selectedTime}
-        onTimeSelect={setSelectedTime}
-      />
+  // useEffect(() => {
+  //   console.log(selectedDate)
+  //   if (!selectedDate) return;
 
+  //   const el = slotRefs.current;
+  //   el?.scrollIntoView({
+  //     behavior: 'smooth',
+  //     block: 'nearest',
+  //     inline: 'center',
+  //   });
+  // }, [selectedDate]);
+
+  return (
+    <div className="relative">
+      {/* Заголовок с информацией */}
+      <div className="mb-6 rounded-2xl border border-white/10 bg-gradient-to-r from-pink-500/10 to-purple-500/10 p-4">
+        <div className="mb-2 flex items-center gap-3">
+          <Calendar size={18} className="text-pink-400" />
+          <h3 className="text-lg font-semibold text-white">
+            {selectedDate?.toLocaleDateString('ru-RU', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </h3>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <Clock size={14} />
+          <span>{timeSlots.length} доступных слотов</span>
+        </div>
+      </div>
+
+      {/* Список временных слотов */}
+      <div className="mb-6" ref={slotRefs}>
+        <TimeSlotsList
+          timeSlots={timeSlots}
+          onRemove={removeTimeSlot}
+          selectedTime={selectedTime}
+          onTimeSelect={setSelectedTime}
+        />
+      </div>
+
+      {/* Кнопка добавления слота для админа */}
       {session?.user && (
         <>
           {/* Floating Action Button */}
-          <motion.button
+          <button
             onClick={() => setShowSheet(true)}
-            whileTap={{ scale: 0.9 }}
-            className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
+            className="fixed right-6 bottom-6 z-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 p-3 shadow-[0_0_10px_rgba(236,72,153,0.8)] transition hover:shadow-[0_0_20px_rgba(236,72,153,1)] lg:hidden"
           >
-            <Plus size={28} />
-          </motion.button>
+            <Plus className="h-6 w-6 text-white" />
+          </button>
 
-          {/* Bottom Sheet */}
+          {/* Модальное окно добавления слота */}
           <AnimatePresence>
             {showSheet && (
-              <>
-                {/* Dimmed background */}
+              <Modal overlayClassName="w-full max-w-sm mx-4" onClose={() => setShowSheet(false)}>
                 <motion.div
-                  className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
-                  initial={{ opacity: 0 }}
-                  onClick={() => setShowSheet(false)}
-                />
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="relative w-full rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-xl"
+                >
+                  {/* Декоративный фон */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-500/10 to-purple-500/10"></div>
 
-                {/* Sheet panel */}
-                <Modal overlayClassName="max-w-md w-full" onClose={() => setShowSheet(false)}>
-                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center md:left-1/2 md:w-[420px] md:-translate-x-1/2">
-                    <button
-                      onClick={() => setShowSheet(false)}
-                      className="absolute top-4 right-6 text-gray-400 transition-colors hover:text-pink-400"
-                    >
-                      <X size={26} />
-                    </button>
-
-                    <h3 className="mb-2 text-lg font-semibold text-pink-400">Добавить слот</h3>
-
-                    {selectedDate && (
-                      <p className="mb-6 text-sm text-gray-400">
-                        {selectedDate.toLocaleDateString('ru-RU', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric',
-                        })}
-                      </p>
-                    )}
-
-                    {/* Glass Input */}
-                    <div className="mb-6 w-full max-w-sm">
-                      <label className="mb-2 block text-sm text-gray-400">Выберите время</label>
-                      <div className="relative">
-                        <input
-                          type="time"
-                          value={newTime}
-                          onChange={(e) => setNewTime(e.target.value)}
-                          className="w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-center text-xl text-white transition-all duration-200 outline-none focus:border-pink-400 focus:bg-white/20"
-                        />
-                        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 blur-sm"></div>
+                  <div className="relative z-10">
+                    <div className="mb-4 flex items-center gap-2">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-purple-500">
+                        <Clock size={14} className="text-white" />
                       </div>
+                      <h3 className="text-lg font-bold text-white">Добавить слот</h3>
                     </div>
 
-                    <Button onClick={addTimeSlot} variant="primary" className="w-full max-w-sm">
-                      Добавить
-                    </Button>
+                    {selectedDate && (
+                      <div className="mb-4 rounded-lg border border-white/10 bg-white/5 p-2">
+                        <p className="text-xs text-gray-300">
+                          {selectedDate.toLocaleDateString('ru-RU', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'long',
+                          })}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Поле ввода времени */}
+                    <div className="mb-4">
+                      <label className="mb-2 block text-xs font-medium text-gray-300">Время</label>
+                      <input
+                        type="time"
+                        value={newTime}
+                        onChange={(e) => setNewTime(e.target.value)}
+                        className="w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-base text-white backdrop-blur-md transition-all duration-200 outline-none focus:border-pink-400 focus:bg-white/20"
+                      />
+                    </div>
+
+                    {/* Кнопки действий */}
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => setShowSheet(false)}
+                        variant="ghost"
+                        className="flex-1 py-2"
+                      >
+                        Отмена
+                      </Button>
+                      <Button
+                        onClick={addTimeSlot}
+                        variant="primary"
+                        className="flex-1 py-2"
+                        // disabled={!newTime}
+                      >
+                        Добавить
+                      </Button>
+                    </div>
                   </div>
-                </Modal>
-              </>
+                </motion.div>
+              </Modal>
             )}
           </AnimatePresence>
         </>

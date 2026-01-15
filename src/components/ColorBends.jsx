@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import './ColorBends.css';
 
 const MAX_COLORS = 8;
 
@@ -95,26 +96,6 @@ void main() {
 }
 `;
 
-/**
- * @typedef {Object} ColorBendsProps
- * @property {string} [className] - CSS class name
- * @property {Object} [style] - Inline styles
- * @property {number} [rotation=45] - Initial rotation in degrees
- * @property {number} [speed=0.2] - Animation speed
- * @property {string[]} [colors=[]] - Array of hex color strings
- * @property {boolean} [transparent=true] - Enable transparency
- * @property {number} [autoRotate=0] - Auto rotation speed
- * @property {number} [scale=1] - Scale factor
- * @property {number} [frequency=1] - Frequency of waves
- * @property {number} [warpStrength=1] - Warp strength
- * @property {number} [mouseInfluence=1] - Mouse influence strength
- * @property {number} [parallax=0.5] - Parallax effect strength
- * @property {number} [noise=0.1] - Noise strength
- */
-
-/**
- * @param {ColorBendsProps} props
- */
 export default function ColorBends({
   className,
   style,
@@ -181,7 +162,6 @@ export default function ColorBends({
       alpha: true
     });
     rendererRef.current = renderer;
-    // Three r152+ uses outputColorSpace and SRGBColorSpace
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
@@ -309,5 +289,5 @@ export default function ColorBends({
     };
   }, []);
 
-  return <div ref={containerRef} className={`w-full h-full relative overflow-hidden ${className}`} style={style} />;
+  return <div ref={containerRef} className={`color-bends-container ${className}`} style={style} />;
 }

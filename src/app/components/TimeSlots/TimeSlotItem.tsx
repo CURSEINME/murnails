@@ -1,6 +1,5 @@
-'use client';
-
-import { useSession } from 'next-auth/react';
+import { motion } from 'framer-motion';
+import { Clock, X } from 'lucide-react';
 
 interface TimeSlotItemProps {
   time: string;
@@ -15,31 +14,43 @@ const TimeSlotItem: React.FC<TimeSlotItemProps> = ({
   onTimeSelect,
   selectedTime,
 }) => {
-  const { data: session } = useSession();
-  const handleSelect = () => onTimeSelect(time);
-  const handleRemove = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onRemove(time);
-  };
-
   const isSelected = time === selectedTime;
 
   return (
-    <div
-      onClick={handleSelect}
-      className={`flex cursor-pointer items-center justify-between rounded-xl border border-white/20 p-3 backdrop-blur-xl transition-all ${isSelected ? 'bg-pink-500/40 shadow-[0_0_15px_rgba(236,72,153,0.5)]' : 'bg-white/10 hover:bg-white/20'} `}
+    <motion.div
+      onClick={() => onTimeSelect(time)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`group relative cursor-pointer rounded-2xl p-2 transition-all duration-300 ${
+        isSelected
+          ? 'border-2 border-pink-400/50 bg-gradient-to-r from-pink-500/30 to-purple-500/30 shadow-lg shadow-pink-500/20'
+          : 'border-2 border-white/20 bg-white/10 hover:border-pink-400/30 hover:bg-white/15'
+      }`}
     >
-      <span className="font-medium text-gray-100">{time}</span>
-      {session?.user && (
-        <button
-          onClick={handleRemove}
-          className="text-lg font-bold text-pink-400 transition hover:text-pink-300"
-          title="Удалить"
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/10 to-purple-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+      <div className="relative z-10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Clock size={16} className={`${isSelected ? 'text-pink-300' : 'text-gray-400'}`} />
+          <span className={`font-medium ${isSelected ? 'text-white' : 'text-gray-200'}`}>
+            {time}
+          </span>
+        </div>
+
+        <motion.button
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(time);
+          }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="rounded-lg p-1 transition-opacity duration-200 hover:bg-red-500/20"
+          title="Удалить слот"
         >
-          ×
-        </button>
-      )}
-    </div>
+          <X size={16} className="text-red-400 hover:text-red-300" />
+        </motion.button>
+      </div>
+    </motion.div>
   );
 };
 
