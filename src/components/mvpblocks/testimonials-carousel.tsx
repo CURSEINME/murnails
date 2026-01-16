@@ -84,6 +84,7 @@ export default function TestimonialsCarousel({
 
   return (
     <section
+      id='feedback'
       className={cn('relative overflow-hidden py-16 md:py-24', className)}
     >
       <div className="absolute inset-0 -z-10">

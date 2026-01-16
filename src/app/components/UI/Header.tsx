@@ -22,14 +22,39 @@ export default function Header(){
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
-              <Link href="/service-sub" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
-                Услуги
+              <Link
+                href="#about-us"
+                scroll={false}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById('about-us')
+                    ?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                О нас
               </Link>
-              <Link href="/gallery" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+              <Link
+                scroll={false}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById('gallery')
+                    ?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                href="#gallery" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
                 Работы
               </Link>
-              <Link href="/about" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
-                О нас
+              <Link 
+                scroll={false}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById('faq')
+                    ?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                href="#faq" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+                Вопросы
               </Link>
             </nav>
           </div>

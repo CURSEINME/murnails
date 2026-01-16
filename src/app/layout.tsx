@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Ubuntu_Sans } from 'next/font/google';
+import { Comfortaa } from 'next/font/google';
+import { Nunito } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import './globals.css';
 import Header from './components/UI/Header';
 import { Providers } from './providers';
@@ -13,6 +16,24 @@ const ubuntu = Ubuntu_Sans({
   weight: ['300', '400', '500', '700'],
   variable: '--font-ubuntu',
   subsets: ['latin'],
+});
+
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-roboto',
+});
+
+const comfortaa = Comfortaa({
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-comfortaa',
+  subsets: ['latin'],
+});
+
+const nunito = Nunito({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-nunito',
 });
 
 export const metadata: Metadata = {
@@ -28,10 +49,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-screen">
       <>
-        <body className={`${ubuntu.className} relative antialiased overflow-hidden h-screen`}>
+        <body className={`${comfortaa.className} relative antialiased overflow-hidden h-screen`}>
           <BackgroundWrapper/>
           <div className="absolute inset-0 z-10 flex flex-col">
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense>
               <Providers>
                 <div className="flex-1 overflow-y-auto">
                 <Header></Header>

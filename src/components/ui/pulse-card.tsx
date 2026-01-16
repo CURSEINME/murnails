@@ -139,7 +139,7 @@ export function CardHoverEffect({
         <div
           className="absolute inset-[-200%] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 340deg, var(--color-card-ascent) 360deg)`,
+            background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 340deg, var(--primary) 360deg)`,
             animation: 'spin 4s linear infinite',
           }}
         />
@@ -162,7 +162,7 @@ export function CardHoverEffect({
         <span
           className={cn(
             'relative z-1 block transition-colors duration-300',
-            'text-black/60 group-hover:text-card-ascent',
+            'text-black/60 group-hover:text-primary',
             'dark:text-zinc-400',
             sizeConfig.iconSize,
           )}
@@ -176,7 +176,7 @@ export function CardHoverEffect({
         <h3
           className={cn(
             'font-medium transition-colors duration-300',
-            'text-black/80 group-hover:text-card-ascent',
+            'text-black/80 group-hover:text-primary',
             'dark:text-white/80',
             sizeConfig.titleSize,
           )}
@@ -196,7 +196,7 @@ export function CardHoverEffect({
       </div>
 
       {/* Shine Effect */}
-      <div className="absolute inset-0 z-20 overflow-hidden rounded-[inherit] opacity-100 transition-all duration-500">
+      {/* <div className="absolute inset-0 z-20 overflow-hidden rounded-[inherit] opacity-100 transition-all duration-500">
         <div
           className="absolute bottom-[55%] left-1/2 aspect-square w-[200%] -translate-x-1/2 rounded-[50%]"
           style={{
@@ -204,7 +204,7 @@ export function CardHoverEffect({
             filter: 'blur(40px)',
           }}
         />
-      </div>
+      </div> */}
     </Div>
   );
 }

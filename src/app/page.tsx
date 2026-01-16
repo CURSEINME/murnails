@@ -5,6 +5,7 @@ import TestimonialsCarousel from "@/components/mvpblocks/testimonials-carousel";
 import AboutUsSalon from "@/components/mvpblocks/about-us-1";
 import GallerySection from "./components/GallerySection";
 import MasonryGallery from "@/components/mvpblocks/masonry-grid-1";
+import FaqMurnails from "@/components/mvpblocks/faq-3";
 
 // Пример использования в компоненте:
 
@@ -71,6 +72,7 @@ export default function Home() {
 
         {/* <GallerySection/> */}
         <MasonryGallery/>
+        <FaqMurnails/>
 
         {/* <section id="portfolio" className="py-32 px-6 text-center">
           <motion.h2

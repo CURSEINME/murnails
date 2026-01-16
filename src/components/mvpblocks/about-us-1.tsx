@@ -2,7 +2,6 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Spotlight } from '@/components/ui/spotlight';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { CardHoverEffect } from '@/components/ui/pulse-card';
 import {
@@ -75,26 +74,28 @@ export default function AboutUsSalon() {
     vision:
       'Создать пространство, где маникюр — это искусство, а каждая клиентка чувствует себя особенной. Мы хотим, чтобы наш салон ассоциировался с лучшим, что может быть в индустрии красоты.',
     values: defaultValues,
-    className: 'relative overflow-hidden py-20',
   };
 
+  const titleRef = useRef(null);
   const missionRef = useRef(null);
   const valuesRef = useRef(null);
 
-  const missionInView = useInView(missionRef, { once: true, amount: 0.3 });
-  const valuesInView = useInView(valuesRef, { once: true, amount: 0.3 });
+  const titleInView = useInView(titleRef, { once: true, amount: 0.1, margin: "-100px" });
+  const missionInView = useInView(missionRef, { once: true, amount: 0.1, });
+  const valuesInView = useInView(valuesRef, { once: true, amount: 0.1, });
 
   return (
-    <section className="relative w-full overflow-hidden pt-20">
+    <section id='about-us' className="relative w-full overflow-hidden py-16 md:py-24">
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         {/* Заголовок */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          ref={titleRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={titleInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mx-auto mb-12 md:mb-16 max-w-3xl text-center"
         >
-          <h1 className="from-foreground/90 via-primary to-foreground/90 bg-gradient-to-r bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             {aboutData.title}
           </h1>
           <p className="text-muted-foreground mt-6 text-xl md:text-2xl">
@@ -103,25 +104,25 @@ export default function AboutUsSalon() {
         </motion.div>
 
         {/* Миссия и Видение */}
-        <div ref={missionRef} className="relative mx-auto mb-24 max-w-7xl">
+        <div ref={missionRef} className="relative mx-auto mb-16 md:mb-24 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={missionInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-            className="relative z-10 grid gap-10 md:gap-12 md:grid-cols-2"
+            transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+            className="relative z-10 grid gap-8 md:gap-12 md:grid-cols-2"
           >
             {/* Блок Миссия */}
             <motion.div
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-b from-white/8 to-white/3 p-8 md:p-10 backdrop-blur-xl border border-white/10"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative overflow-hidden rounded-3xl bg-card/70 backdrop-blur-md border border-border p-8 md:p-10 hover:bg-card/80 transition-all duration-300"
             >
-              <BorderBeam duration={10} size={320} className="via-rose-400/30" />
+              <BorderBeam  duration={12} size={300} className="via-primary/40 from-transparent to-transparent" />
 
-              <div className="from-rose-500/20 to-pink-500/10 mb-6 inline-flex aspect-square h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br backdrop-blur-md">
-                <Sparkles className="h-8 w-8 text-rose-400" />
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 backdrop-blur-md">
+                <Sparkles className="h-8 w-8 text-primary" />
               </div>
 
-              <h2 className="mb-4 bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400 bg-clip-text text-3xl font-bold text-transparent">
+              <h2 className="mb-4 bg-clip-text text-3xl font-bold text-primary">
                 Наша миссия
               </h2>
 
@@ -132,21 +133,16 @@ export default function AboutUsSalon() {
 
             {/* Блок Видение */}
             <motion.div
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-b from-white/8 to-white/3 p-8 md:p-10 backdrop-blur-xl border border-white/10"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative overflow-hidden rounded-3xl bg-card/70 backdrop-blur-md border border-border p-8 md:p-10 hover:bg-card/80 transition-all duration-300"
             >
-              <BorderBeam
-                duration={10}
-                size={320}
-                reverse
-                className="via-purple-400/30"
-              />
+              <BorderBeam duration={12} size={300} reverse className="via-primary/40 from-transparent to-transparent" />
 
-              <div className="from-purple-500/20 to-indigo-500/10 mb-6 inline-flex aspect-square h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br backdrop-blur-md">
-                <Crown className="h-8 w-8 text-purple-400" />
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 backdrop-blur-md">
+                <Crown className="h-8 w-8 text-primary" />
               </div>
 
-              <h2 className="mb-4 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-3xl font-bold text-transparent">
+              <h2 className="mb-4 text-3xl font-bold text-primary">
                 Наше видение
               </h2>
 
@@ -158,14 +154,14 @@ export default function AboutUsSalon() {
         </div>
 
         {/* Ценности */}
-        <div ref={valuesRef} className="mb-20 md:mb-28">
+        <div ref={valuesRef} className="mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={valuesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="mb-12 text-center"
+            className="mb-10 md:mb-12 text-center"
           >
-            <h2 className="from-foreground/90 to-foreground/70 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
               Наши принципы
             </h2>
             <p className="text-muted-foreground mx-auto mt-5 max-w-2xl text-lg">
@@ -192,7 +188,6 @@ export default function AboutUsSalon() {
                     icon={<IconComponent className="h-7 w-7" />}
                     title={value.title}
                     description={value.description}
-                    variant="rose"
                     glowEffect={true}
                     size="lg"
                   />

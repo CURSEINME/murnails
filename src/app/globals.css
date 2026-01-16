@@ -11,7 +11,7 @@
   --popover:    oklch(0.20063 0.00861 347.12246);
   --popover-foreground: oklch(0.98500 0.00000 0.00000);
 
-  --primary:    oklch(0.46551 0.16697 356.97485);
+  --primary: oklch(0.72 0.18 357);
   --primary-foreground: oklch(0.98500 0.00000 0.00000);
 
   --secondary:  oklch(0.15608 0.04883 26.32718);
@@ -56,6 +56,10 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+}
+
+html {
+  scroll-behavior: smooth !important;
 }
 
 /* Если нужен тёмный режим — добавляй отдельно */
