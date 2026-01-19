@@ -36,7 +36,7 @@ export default function ServiceCard({ service, onEdit }: Props) {
     <motion.div
       key={service.id}
       whileHover={{ scale: 1.02 }}
-      className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-white/10 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/20"
+      className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-card/60 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/10"
     >
       {/* Кнопки действий */}
       {status === 'authenticated' && session?.user?.role === 'admin' && (
@@ -60,11 +60,11 @@ export default function ServiceCard({ service, onEdit }: Props) {
       <Link href={`/calendar?service=${service.title}`}>
         <div className="h-48 overflow-hidden rounded-t-2xl">
           {service.serviceImage.length > 0 ? (
-            <Image
+            <img
               src={service.serviceImage}
               alt={service.title}
-              width={300}
-              height={300}
+              width={200}
+              height={200}
               className="mx-auto h-full w-full object-cover"
             />
           ) : (

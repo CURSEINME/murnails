@@ -11,6 +11,7 @@ import { Providers } from './providers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BackgroundWrapper } from './components/BackgroundWrapper';
+import { NavbarDemo } from './components/UI/Navbar';
 
 const ubuntu = Ubuntu_Sans({
   weight: ['300', '400', '500', '700'],
@@ -49,18 +50,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-screen">
       <>
-        <body className={`${comfortaa.className} relative antialiased overflow-hidden h-screen`}>
-          <BackgroundWrapper/>
-          <div className="absolute inset-0 z-10 flex flex-col">
+        <body className={`${comfortaa.className} relative antialiased h-screen`}>
+            <BackgroundWrapper/>
             <Suspense>
               <Providers>
-                <div className="flex-1 overflow-y-auto">
-                <Header></Header>
+                <main className="">
+                  <NavbarDemo/>
+                  {/* <Header></Header> */}
                   {children}
-                </div>
+                </main>
               </Providers>
             </Suspense>
-          </div>
           <ToastContainer
             position="top-center"
             autoClose={5000}

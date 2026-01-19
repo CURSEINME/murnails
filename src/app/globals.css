@@ -59,7 +59,7 @@
 }
 
 html {
-  scroll-behavior: smooth !important;
+  scroll-behavior: smooth;
 }
 
 /* Если нужен тёмный режим — добавляй отдельно */

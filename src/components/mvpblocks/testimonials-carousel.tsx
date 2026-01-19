@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -87,11 +87,6 @@ export default function TestimonialsCarousel({
       id='feedback'
       className={cn('relative overflow-hidden py-16 md:py-24', className)}
     >
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.2),transparent_60%)]" />
-        <div className="bg-primary/5 absolute top-1/4 left-1/4 h-32 w-32 rounded-full blur-3xl" />
-        <div className="bg-primary/10 absolute right-1/4 bottom-1/4 h-40 w-40 rounded-full blur-3xl" />
-      </div>
 
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
@@ -131,10 +126,6 @@ export default function TestimonialsCarousel({
                   viewport={{ once: true }}
                   className="border-border from-secondary/20 to-card relative h-full w-[330px] max-w-md rounded-2xl border bg-gradient-to-b p-6 shadow-md backdrop-blur-sm"
                 >
-                  {/* Enhanced decorative gradients */}
-                  <div className="from-primary/15 to-card absolute -top-5 -left-5 -z-10 h-40 w-40 rounded-full bg-gradient-to-b blur-md" />
-                  <div className="from-primary/10 absolute -right-10 -bottom-10 -z-10 h-32 w-32 rounded-full bg-gradient-to-t to-transparent opacity-70 blur-xl" />
-
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
                     whileInView={{ opacity: 1, y: 0 }}

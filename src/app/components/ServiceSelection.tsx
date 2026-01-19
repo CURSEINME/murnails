@@ -30,7 +30,7 @@ const ServiceSelection = ({ services }: { services: Service[] }) => {
       <div className="mt-5 flex flex-col items-center">
         {/* Заголовок */}
         <div className="mb-10 text-center">
-          <p className="text-2xl font-bold text-pink-400">Выберите услугу и запишитесь онлайн</p>
+          <p className="text-3xl font-bold white">Выберите услугу и запишитесь онлайн</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

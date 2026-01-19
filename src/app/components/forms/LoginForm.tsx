@@ -36,6 +36,8 @@ export default function LoginForm() {
       callbackUrl: '/',
     });
 
+    console.log(res)
+
     setLoading(false);
   };
 

@@ -4,7 +4,7 @@ import ServiceSelection from '../components/ServiceSelection';
 export default async function ServicesPage() {
   const services = await prisma.service.findMany();
   return (
-    <div className="mx-auto max-w-[1400px] px-2 md:px-5">
+    <div className="container px-5 mx-auto">
       <ServiceSelection services={services} />
     </div>
   );

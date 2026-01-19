@@ -4,12 +4,12 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, ShieldCheck, Star, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import Button from '@/app/components/UI/Button';
 
 export default function ManicureHero() {
   return (
-    <section className="relative min-h-[calc(100vh-80px)] w-full overflow-hidden">
-      <div className="container mx-auto flex min-h-[calc(100vh-80px)] items-center px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-[calc(100vh-86px)] w-full overflow-hidden">
+      <div className="container mx-auto flex min-h-[calc(100vh-86px)] items-center px-4 sm:px-6 lg:px-8">
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-4">
 
           {/* LEFT — TEXT (уменьшен, поддерживающий) */}
@@ -18,7 +18,7 @@ export default function ManicureHero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight"
+              className="bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-[40px] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight"
             >
               Идеальный маникюр<br />для твоих рук
             </motion.h1>
@@ -27,7 +27,7 @@ export default function ManicureHero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="mt-6 max-w-xl text-lg sm:text-xl text-muted-foreground font-light mx-auto lg:mx-0"
+              className="mt-6 max-w-xl text-md sm:text-xl text-muted-foreground font-light mx-auto lg:mx-0"
             >
               Аккуратный маникюр, стерильные инструменты и премиум материалы.  
               Подчёркиваем естественную красоту твоих ногтей.
@@ -40,8 +40,10 @@ export default function ManicureHero() {
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start"
             >
               <Button
+                href="/service-sub"
+                variant="gradient"
+                className="shadow-pink-600/40 hover:shadow-pink-600/60 flex justify-center"
                 size="lg"
-                className="group rounded-full bg-primary px-8 py-6 text-lg shadow-lg transition-all hover:shadow-primary/30"
               >
                 <span className="flex items-center">
                   Записаться онлайн
@@ -50,9 +52,11 @@ export default function ManicureHero() {
               </Button>
 
               <Button
-                variant="outline"
-                size="lg"
-                className="rounded-full bg-background/50 backdrop-blur-sm px-8 py-6 text-lg border-primary/30"
+                onClick={() => {
+                  document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+                }}  
+                variant="secondary"
+                className=""
               >
                 Наши работы
               </Button>
