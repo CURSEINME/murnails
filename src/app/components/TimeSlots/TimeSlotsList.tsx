@@ -1,4 +1,6 @@
-import TimeSlotItem from "./TimeSlotItem";
+import { AnimatePresence, motion } from 'framer-motion';
+import TimeSlotItem from './TimeSlotItem';
+import { use, useEffect, useRef } from 'react';
 
 interface TimeSlotsListProps {
   timeSlots: string[];
@@ -14,20 +16,29 @@ const TimeSlotsList: React.FC<TimeSlotsListProps> = ({
   onTimeSelect,
 }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-      {timeSlots.length > 0 ? (
-        timeSlots.map((time, index) => (
-          <TimeSlotItem
-            key={index}
-            time={time}
-            onRemove={onRemove}
-            onTimeSelect={onTimeSelect}
-            selectedTime={selectedTime}
-          />
-        ))
-      ) : (
-        <p className="text-gray-500">Нет доступных временных слотов</p>
-      )}
+    <div className="md:grid-cols- grid grid-cols-3 gap-2">
+      <AnimatePresence mode="popLayout">
+        {timeSlots.length > 0 ? (
+          timeSlots.map((time) => (
+            <motion.div
+              key={time}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+            >
+              <TimeSlotItem
+                time={time}
+                onRemove={onRemove}
+                onTimeSelect={onTimeSelect}
+                selectedTime={selectedTime}
+              />
+            </motion.div>
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">Нет доступных временных слотов</p>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

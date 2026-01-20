@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
 
 interface TimeSlotItemProps {
   time: string;
@@ -12,29 +12,28 @@ interface TimeSlotItemProps {
 const TimeSlotItem: React.FC<TimeSlotItemProps> = ({
   time,
   onRemove,
-  selectedTime,
   onTimeSelect,
+  selectedTime,
 }) => {
   const { data: session } = useSession();
-
-  const handleSelectTime = () => {
-    onTimeSelect(time);
-  };
-  const handleRemoveTime = (e: React.MouseEvent) => {
+  const handleSelect = () => onTimeSelect(time);
+  const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove(time);
   };
+
+  const isSelected = time === selectedTime;
+
   return (
     <div
-      onClick={handleSelectTime}
-      className={`border border-neutral-700 rounded-lg p-3 flex justify-between items-center bg-neutral-700/70 hover:bg-gray-700 transition-colors
-        ${time === selectedTime ? "bg-pink-500" : ""}`}
+      onClick={handleSelect}
+      className={`flex cursor-pointer items-center justify-between rounded-xl border border-white/20 p-3 backdrop-blur-xl transition-all ${isSelected ? 'bg-pink-500/40 shadow-[0_0_15px_rgba(236,72,153,0.5)]' : 'bg-white/10 hover:bg-white/20'} `}
     >
-      <span className="text-gray-200">{time}</span>
+      <span className="font-medium text-gray-100">{time}</span>
       {session?.user && (
         <button
-          onClick={handleRemoveTime}
-          className="text-pink-500 hover:text-pink-400 text-xl font-bold transition-colors"
+          onClick={handleRemove}
+          className="text-lg font-bold text-pink-400 transition hover:text-pink-300"
           title="Удалить"
         >
           ×

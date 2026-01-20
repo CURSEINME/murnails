@@ -1,30 +1,498 @@
+@tailwind utilities;
+
 @import "tailwindcss";
 
 :root {
-  --background: #171717;
-  --foreground: #ededed;
+  --background: oklch(0.20717 0.01233 347.53320);
+  --foreground: oklch(0.98500 0.00000 0.00000);
+  --card:       oklch(0.21027 0.01265 347.54927);
+  --card-ascent: oklch(0.46551 0.16697 356.97485);
+  --card-foreground: oklch(0.98500 0.00000 0.00000);
+  --popover:    oklch(0.20063 0.00861 347.12246);
+  --popover-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --primary: oklch(0.72 0.18 357);
+  --primary-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --secondary:  oklch(0.15608 0.04883 26.32718);
+  --secondary-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --accent:     oklch(0.16959 0.07429 328.92716);
+  --accent-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --destructive: oklch(0.62468 0.18903 31.23539);
+  --destructive-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --muted:      oklch(0.26222 0.01798 347.75487);
+  --muted-foreground: oklch(0.98500 0.00000 0.00000);
+
+  --border:     oklch(0.27301 0.01411 347.34017);
+  --input:      oklch(0.27301 0.01411 347.34017);
+  --ring:       oklch(0.46551 0.16697 356.97485);
+
+  --radius: 0.75rem;
 }
 
 @theme inline {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  --color-ultra-light-blue: #F6F6F9;
-  --color-light-blue: #00B8BE;
-  --color-blue: #00B8BE;
-  /* --color- */
+  --color-card: var(--card);
+  --color-card-color: var(--card-ascent);
+  --color-card-ascent: var(--card-ascent);
+  --card-color: var(--card-color);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+.spin {
+  animation: spin 5s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-} */
+}
+
+#bg-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#app-root {
+  position: relative;
+  z-index: 0;
+}
+
+ 
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+ 
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+ 
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+@keyframes liquidEffect {
+  0% {
+    clip-path: polygon(
+      30% 50%,
+      75% 50%,
+      75% 10%,
+      85% 60%,
+      5% 10%,
+      45% 50%,
+      20% 70%,
+      7% 25%,
+      60% 35%,
+      45% 70%,
+      10% 75%,
+      15% 45%,
+      5% 85%,
+      40% 55%,
+      80% 85%,
+      5% 75%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      15% 105%,
+      85% 40%,
+      20% 75%,
+      30% -40%,
+      55% -15%,
+      50% 50%,
+      95% 50%,
+      55% 75%,
+      5% -10%,
+      75% 100%,
+      50% 20%,
+      35% 50%,
+      30% 85%,
+      75% 55%,
+      30% 55%,
+      75% 65%
+    );
+  }
+}
+
+@keyframes liquidEffect2 {
+  0% {
+    clip-path: polygon(
+      40% 40%,
+      65% 50%,
+      70% 25%,
+      80% 60%,
+      20% 25%,
+      55% 40%,
+      35% 65%,
+      25% 40%,
+      70% 35%,
+      55% 70%,
+      25% 70%,
+      30% 50%,
+      20% 75%,
+      50% 60%,
+      75% 80%,
+      20% 75%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      30% 90%,
+      85% 45%,
+      35% 70%,
+      40% -20%,
+      60% 5%,
+      60% 50%,
+      95% 55%,
+      60% 75%,
+      20% -5%,
+      80% 95%,
+      60% 30%,
+      45% 55%,
+      40% 85%,
+      80% 60%,
+      40% 60%,
+      80% 70%
+    );
+  }
+  80% {
+    clip-path: polygon(
+      15% 50%,
+      25% 75%,
+      65% 15%,
+      90% 25%,
+      5% 30%,
+      45% 30%,
+      20% 80%,
+      40% 40%,
+      30% 95%,
+      65% 45%,
+      60% 30%,
+      35% 60%,
+      25% 45%,
+      35% 90%,
+      55% 85%,
+      45% 70%
+    );
+  }
+}
+
+.animate-liquidEffect {
+  animation: liquidEffect 30s ease-in-out infinite alternate;
+}
+
+.animate-liquidEffect2 {
+  animation: liquidEffect2 25s ease-in-out infinite alternate;
+  animation-delay: -10s;
+}
+
+.custom-container {
+  max-width: 1400;
+  margin: 0px auto 50px auto;
+  padding: 0 10px;
+}
+
+@media (width >= 1024px) {
+  .custom-container {
+    padding: 0 20px;
+  }
+}
+
+/* Контейнер фона */
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  overflow: hidden;
+
+  filter: blur(70px);
+  opacity: 0.7;
+}
+
+/* Слой 1 */
+
+/* Слой 1 */
+.bg-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vmax;
+  height: 100vmax;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    rgb(105, 34, 195) 0%,
+    rgb(190, 75, 219) 25%,
+    rgb(239, 130, 13) 50%,
+    rgb(252, 191, 73) 75%,
+    rgb(234, 88, 12) 100%
+  );
+  will-change: clip-path;
+  animation: liquidEffect 20s ease-in-out infinite alternate;
+}
+
+/* Слой 2 */
+.bg-element2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-48%, -52%);
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    90deg,
+    rgb(105, 34, 195) 0%,
+    rgb(190, 75, 219) 25%,
+    rgb(220, 38, 38) 50%,
+    rgb(252, 191, 73) 75%,
+    rgb(234, 88, 12) 100%
+  );
+  will-change: clip-path;
+  animation: liquidEffect2 25s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes colorShift {
+  0% {
+    background: radial-gradient(
+      circle at center,
+      rgba(212, 0, 255, 0.85) 0%,
+      rgba(255, 102, 229, 0.7) 30%,
+      rgba(255, 153, 102, 0.6) 60%,
+      transparent 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle at center,
+      rgba(212, 0, 255, 0.85) 0%,
+      rgba(255, 102, 229, 0.7) 30%,
+      rgba(255, 128, 128, 0.6) 60%,
+      transparent 100%
+    );
+  }
+  100% {
+    background: radial-gradient(
+      circle at center,
+      rgba(212, 0, 255, 0.85) 0%,
+      rgba(255, 102, 229, 0.7) 30%,
+      rgba(255, 178, 102, 0.6) 60%,
+      transparent 100%
+    );
+  }
+}
+
+@keyframes colorShift2 {
+  0% {
+    background: radial-gradient(
+      circle at center,
+      rgba(124, 37, 224, 0.85) 0%,
+      rgba(255, 51, 51, 0.7) 30%,
+      rgba(255, 128, 128, 0.6) 60%,
+      transparent 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle at center,
+      rgba(124, 37, 224, 0.85) 0%,
+      rgba(255, 51, 51, 0.7) 30%,
+      rgba(255, 153, 102, 0.6) 60%,
+      transparent 100%
+    );
+  }
+  100% {
+    background: radial-gradient(
+      circle at center,
+      rgba(124, 37, 224, 0.85) 0%,
+      rgba(255, 51, 51, 0.7) 30%,
+      rgba(255, 178, 102, 0.6) 60%,
+      transparent 100%
+    );
+  }
+}
+
+/* Анимации */
+@keyframes liquidEffect {
+  0% {
+    clip-path: polygon(
+      30% 50%,
+      75% 50%,
+      75% 10%,
+      85% 60%,
+      5% 10%,
+      45% 50%,
+      20% 70%,
+      7% 25%,
+      60% 35%,
+      45% 70%,
+      10% 75%,
+      15% 45%,
+      5% 85%,
+      40% 55%,
+      80% 85%,
+      5% 75%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      15% 105%,
+      85% 40%,
+      20% 75%,
+      30% -40%,
+      55% -15%,
+      50% 50%,
+      95% 50%,
+      55% 75%,
+      5% -10%,
+      75% 100%,
+      50% 20%,
+      35% 50%,
+      30% 85%,
+      75% 55%,
+      30% 55%,
+      75% 65%
+    );
+  }
+  100% {
+    clip-path: polygon(
+      30% 50%,
+      75% 50%,
+      75% 10%,
+      85% 60%,
+      5% 10%,
+      45% 50%,
+      20% 70%,
+      7% 25%,
+      60% 35%,
+      45% 70%,
+      10% 75%,
+      15% 45%,
+      5% 85%,
+      40% 55%,
+      80% 85%,
+      5% 75%
+    );
+  }
+}
+
+@keyframes liquidEffect2 {
+  0% {
+    clip-path: polygon(
+      40% 40%,
+      65% 50%,
+      70% 25%,
+      80% 60%,
+      20% 25%,
+      55% 40%,
+      35% 65%,
+      25% 40%,
+      70% 35%,
+      55% 70%,
+      25% 70%,
+      30% 50%,
+      20% 75%,
+      50% 60%,
+      75% 80%,
+      20% 75%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      30% 90%,
+      85% 45%,
+      35% 70%,
+      40% -20%,
+      60% 5%,
+      60% 50%,
+      95% 55%,
+      60% 75%,
+      20% -5%,
+      80% 95%,
+      60% 30%,
+      45% 55%,
+      40% 85%,
+      80% 60%,
+      40% 60%,
+      80% 70%
+    );
+  }
+  100% {
+    clip-path: polygon(
+      40% 40%,
+      65% 50%,
+      70% 25%,
+      80% 60%,
+      20% 25%,
+      55% 40%,
+      35% 65%,
+      25% 40%,
+      70% 35%,
+      55% 70%,
+      25% 70%,
+      30% 50%,
+      20% 75%,
+      50% 60%,
+      75% 80%,
+      20% 75%
+    );
+  }
 }

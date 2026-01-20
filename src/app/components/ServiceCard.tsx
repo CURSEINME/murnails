@@ -1,60 +1,85 @@
-"use client";
-import { Service } from "@prisma/client";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { IoRemoveCircle, IoRemoveOutline, IoTime } from "react-icons/io5";
-import { deleteServiceAction } from "../../../actions/services";
+'use client';
+
+import { Service } from '@prisma/client';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { deleteServiceAction } from '../../../actions/services';
+import { Edit, Trash2, Clock } from 'lucide-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSession } from 'next-auth/react';
 
 interface Props {
-  service: Service;
+  service: Service; 
   onEdit: (service: Service) => void;
 }
+
 export default function ServiceCard({ service, onEdit }: Props) {
-  const handleDelete = (service: Service) => {
-    if (confirm("Вы действительно хотите удалить услугу?")) {
-      deleteServiceAction(service);
+  const { data: session, status } = useSession();
+
+  console.log(session, status);
+
+  const handleDelete = async (service: Service) => {
+    if (confirm('Вы действительно хотите удалить услугу?')) {
+      const res = await deleteServiceAction(service);
+
+      if (!res.success) {
+        toast.error('Произошла ошибка!');
+      } else if (res.success) {
+        toast.success('Услуга успешно удалена!');
+      }
     }
   };
+
   return (
     <motion.div
       key={service.id}
-      whileHover={{ scale: 1.03 }}
-      className="relative rounded-xl h-[400px] cursor-pointer transition-all border-2 border-neutral-700 bg-neutral-800/70 hover:border-pink-500 hover:bg-zinc-900"
+      whileHover={{ scale: 1.02 }}
+      className="relative h-[400px] cursor-pointer rounded-2xl border border-white/20 bg-card/60 shadow-md backdrop-blur-md transition-all hover:border-pink-400/70 hover:bg-white/10"
     >
-      <div className="absolute top-2 right-2 flex items-center">
-        <button
-          onClick={() => onEdit(service)}
-          className="bg-pink-500/20 hover:bg-pink-500/40 text-pink-300 text-sm px-2 py-1 rounded-md"
-        >
-          ✏️
-        </button>
-        <button onClick={() => handleDelete(service)}>
-          <IoRemoveCircle size={40} />
-        </button>
-      </div>
-
-      <Link href={`/calendar?service=${service.title}`}>
-        <div className="h-48 overflow-hidden">
-          <Image
-            src={service.serviceImage}
-            alt={service.title}
-            width={300}
-            height={300}
-            className="mx-auto rounded-t-xl h-full w-full object-cover"
-          />
+      {/* Кнопки действий */}
+      {status === 'authenticated' && session?.user?.role === 'admin' && (
+        <div className="absolute top-3 right-3 flex items-center gap-2">
+          <button
+            onClick={() => onEdit(service)}
+            className="rounded-xl bg-white/10 p-2 text-pink-300 transition-colors hover:bg-pink-500/30"
+          >
+            <Edit size={18} />
+          </button>
+          <button
+            onClick={() => handleDelete(service)}
+            className="rounded-xl bg-white/10 p-2 text-red-400 transition-colors hover:bg-red-500/30"
+          >
+            <Trash2 size={18} />
+          </button>
         </div>
-        <div className="p-5 h-1/2 flex flex-col">
-          <h3 className="text-xl font-bold text-gray-100 mt-1">
-            {service.title}
-          </h3>
-          <p className="text-gray-400 mt-2 text-sm">{service.description}</p>
-          <div className="flex justify-between items-center mt-auto">
-            <div className=" text-gray-400 flex items-center gap-2">
-              <IoTime className="h-[1em] w-[1em]" />
-              <div>{service.time}</div>
+      )}
+
+      {/* Контент карточки */}
+      <Link href={`/calendar?service=${service.title}`}>
+        <div className="h-48 overflow-hidden rounded-t-2xl">
+          {service.serviceImage.length > 0 ? (
+            <img
+              src={service.serviceImage}
+              alt={service.title}
+              width={200}
+              height={200}
+              className="mx-auto h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-[300px] w-[300px] items-center justify-center">No image</div>
+          )}
+        </div>
+        <div className="flex h-1/2 flex-col p-5">
+          <h3 className="text-xl font-semibold text-white/90">{service.title}</h3>
+          <p className="mt-2 line-clamp-3 text-sm text-gray-300">{service.description}</p>
+          <div className="mt-auto flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <Clock size={16} />
+              <span>{service.time}</span>
             </div>
-            <span className="bg-pink-500/10 text-pink-400 px-3 py-1 rounded-full text-sm font-medium">
+            <span className="rounded-full bg-pink-500/10 px-3 py-1 text-sm font-medium text-pink-400">
               {service.price} ₽
             </span>
           </div>
