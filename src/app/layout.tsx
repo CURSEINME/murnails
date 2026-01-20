@@ -48,19 +48,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-screen">
+    <html lang="en">
       <>
-        <body className={`${comfortaa.className} relative antialiased h-screen`}>
+        <body className={`${comfortaa.className} relative antialiased`}>
+            <div id='bg-root'/>
             <BackgroundWrapper/>
-            <Suspense>
-              <Providers>
-                <main className="">
-                  <NavbarDemo/>
-                  {/* <Header></Header> */}
-                  {children}
-                </main>
-              </Providers>
-            </Suspense>
+            <div id='app-root'>
+              <Suspense>
+                <Providers>
+                  <main className="">
+                    <NavbarDemo/>
+                    {/* <Header></Header> */}
+                    {children}
+                  </main>
+                </Providers>
+              </Suspense>
+            </div>
           <ToastContainer
             position="top-center"
             autoClose={5000}

@@ -71,6 +71,20 @@ html {
   }
 }
 
+#bg-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#app-root {
+  position: relative;
+  z-index: 0;
+}
+
  
 @keyframes moveHorizontal {
   0% {
