@@ -51,9 +51,11 @@ export default function RootLayout({
     <html lang="en">
       <>
         <body className={`${comfortaa.className} relative antialiased`}>
+          <div id="bg-root" />
+          <BackgroundWrapper/>
+          <div id="app-root">
             <Suspense>
               <Providers>
-                <BackgroundWrapper/>
                 <main className="">
                   <NavbarDemo/>
                   {/* <Header></Header> */}
@@ -61,6 +63,7 @@ export default function RootLayout({
                 </main>
               </Providers>
             </Suspense>
+          </div>
           <ToastContainer
             position="top-center"
             autoClose={5000}
