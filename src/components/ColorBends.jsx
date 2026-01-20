@@ -5,6 +5,7 @@ const MAX_COLORS = 8;
 
 const frag = `
 precision highp float;
+precision highp int;
 #define MAX_COLORS ${MAX_COLORS}
 uniform vec2 uCanvas;
 uniform float uTime;
@@ -140,7 +141,7 @@ export default function ColorBends({
   const autoRotateRef = useRef(autoRotate);
   const pointerTargetRef = useRef(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef(new THREE.Vector2(0, 0));
-  const pointerSmoothRef = useRef(8);
+  // const pointerSmoothRef = useRef(8);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -177,6 +178,7 @@ export default function ColorBends({
     scene.add(mesh);
 
     const renderer = new THREE.WebGLRenderer({
+      antialias: false,
       alpha: false,
       premultipliedAlpha: false
     });
@@ -192,7 +194,7 @@ export default function ColorBends({
     renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
 
-    const clock = new THREE.Clock();
+    // const clock = new THREE.Clock();
 
     let lastW = 0;
     let lastH = 0;
@@ -213,26 +215,43 @@ export default function ColorBends({
     window.addEventListener('orientationchange', handleResize);
     handleResize();
 
-    const loop = () => {
-      const dt = clock.getDelta();
-      const elapsed = clock.elapsedTime;
-      material.uniforms.uTime.value = elapsed;
+    let lastTime = 0;
+    const FPS = 30;
+    const FRAME_INTERVAL = 1 / FPS;
 
-      const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
+    const loop = (now) => {
+      const time = now * 0.001; // ms → seconds
+      const delta = time - lastTime;
+
+      if (delta < FRAME_INTERVAL) {
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
+
+      lastTime = time;
+
+      // 🔹 стабильное время
+      material.uniforms.uTime.value = time;
+
+      // 🔹 вращение
+      const deg =
+        (rotationRef.current % 360) +
+        autoRotateRef.current * time;
       const rad = (deg * Math.PI) / 180;
-      const c = Math.cos(rad);
-      const s = Math.sin(rad);
-      material.uniforms.uRot.value.set(c, s);
+      material.uniforms.uRot.value.set(Math.cos(rad), Math.sin(rad));
 
+      // 🔹 pointer smoothing без dt
       const cur = pointerCurrentRef.current;
       const tgt = pointerTargetRef.current;
-      const amt = Math.min(1, dt * pointerSmoothRef.current);
-      cur.lerp(tgt, amt);
+      cur.lerp(tgt, 0.12); // фиксированный коэффициент
       material.uniforms.uPointer.value.copy(cur);
+
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(loop);
     };
+
     rafRef.current = requestAnimationFrame(loop);
+
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
@@ -260,7 +279,7 @@ export default function ColorBends({
     material.uniforms.uWarpStrength.value = warpStrength;
     material.uniforms.uMouseInfluence.value = mouseInfluence;
     material.uniforms.uParallax.value = parallax;
-    material.uniforms.uNoise.value = noise;
+    material.uniforms.uNoise.value = 0.0;
 
     const toVec3 = hex => {
       const h = hex.replace('#', '').trim();

@@ -43,7 +43,7 @@ export default function Background() {
         warpStrength={1}
         mouseInfluence={0.8}
         parallax={0.5}
-        noise={0.1}
+        noise={0}
         transparent
       />
   );
