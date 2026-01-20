@@ -90,7 +90,7 @@ export default function ManicureHero() {
             {/* Второе фото — теперь сверху-слева, торчит сильно, выше по z-index */}
             <div className="absolute top-[-12%] left-[-8%] w-[58%] aspect-square overflow-hidden rounded-2xl shadow-2xl shadow-primary/25 rotate-[10deg] z-30 hover:rotate-[6deg] hover:scale-110 transition-all duration-500">
               <Image
-                src="/nails/nails7.jpg"
+                src="/nails/nails7.webp"
                 alt="Деталь микро-френч"
                 fill
                 className="object-cover"
@@ -101,7 +101,7 @@ export default function ManicureHero() {
             {/* Основное фото — центр, чуть меньше, чтобы не перекрывать полностью */}
             <div className="absolute top-[8%] right-[-4%] w-[82%] aspect-[3/4] overflow-hidden rounded-3xl shadow-2xl shadow-primary/35 rotate-[-6deg] z-20 hover:rotate-[-3deg] hover:scale-105 transition-all duration-500">
               <Image
-                src="/nails/nails15.jpg"
+                src="/nails/nails15.webp"
                 alt="Основной маникюр"
                 fill
                 className="object-cover"
@@ -112,7 +112,7 @@ export default function ManicureHero() {
             {/* Третье фото — снизу, торчит справа-снизу, самый высокий z-index */}
             <div className="absolute bottom-[-10%] left-[12%] w-[62%] aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-primary/25 rotate-[-4deg] z-40 hover:rotate-[-1deg] hover:scale-105 transition-all duration-500">
               <Image
-                src="/nails/nails8.jpg"
+                src="/nails/nails8.webp"
                 alt="Деталь дизайна"
                 fill
                 className="object-cover scale-x-[-1]"

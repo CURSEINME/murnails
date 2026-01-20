@@ -13,7 +13,7 @@ export function BackgroundWrapper() {
         frequency={1}
         warpStrength={1}
         noise={0.03}
-        transparent
+        transparent={false}
       />
     </div>
   );

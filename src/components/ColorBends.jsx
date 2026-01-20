@@ -4,6 +4,7 @@ import * as THREE from 'three';
 const MAX_COLORS = 8;
 
 const frag = `
+precision highp float;
 #define MAX_COLORS ${MAX_COLORS}
 uniform vec2 uCanvas;
 uniform float uTime;
