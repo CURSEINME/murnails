@@ -4,7 +4,10 @@ import ColorBends from '@/components/ColorBends';
 
 export function BackgroundWrapper() {
   return (
-    <div className="fixed inset-0 -z-10">
+    <div
+      className="fixed inset-0 -z-10 pointer-events-none"
+      style={{ width: '100vw', height: '100vh' }}
+    >
       <ColorBends
         colors={['#0e0610', '#3a1227', '#7a2e5f']}
         rotation={0.2}

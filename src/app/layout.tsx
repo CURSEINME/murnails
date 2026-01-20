@@ -48,12 +48,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-screen">
+    <html lang="en">
       <>
-        <body className={`${comfortaa.className} relative antialiased h-screen`}>
-            <BackgroundWrapper/>
+        <body className={`${comfortaa.className} relative antialiased`}>
             <Suspense>
               <Providers>
+                <BackgroundWrapper/>
                 <main className="">
                   <NavbarDemo/>
                   {/* <Header></Header> */}

@@ -168,8 +168,8 @@ export default function ColorBends({
         uParallax: { value: parallax },
         uNoise: { value: noise }
       },
-      premultipliedAlpha: true,
-      transparent: true
+      premultipliedAlpha: false,
+      transparent: false
     });
     materialRef.current = material;
 
@@ -177,14 +177,15 @@ export default function ColorBends({
     scene.add(mesh);
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      powerPreference: 'high-performance',
-      alpha: true
+      alpha: false,
+      premultipliedAlpha: false
     });
+    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+
     rendererRef.current = renderer;
     // Three r152+ uses outputColorSpace and SRGBColorSpace
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(DPR);
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
@@ -193,22 +194,24 @@ export default function ColorBends({
 
     const clock = new THREE.Clock();
 
+    let lastW = 0;
+    let lastH = 0;
+
     const handleResize = () => {
-      const w = container.clientWidth || 1;
-      const h = container.clientHeight || 1;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      if (w === lastW && h === lastH) return;
+
+      lastW = w;
+      lastH = h;
+
       renderer.setSize(w, h, false);
       material.uniforms.uCanvas.value.set(w, h);
     };
-
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
     handleResize();
-
-    if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(handleResize);
-      ro.observe(container);
-      resizeObserverRef.current = ro;
-    } else {
-      window.addEventListener('resize', handleResize);
-    }
 
     const loop = () => {
       const dt = clock.getDelta();
