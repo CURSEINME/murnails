@@ -2,7 +2,6 @@ import Link from "next/link";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'gradient';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -17,7 +16,8 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   type = 'button',
   size = 'md',
-  href
+  href,
+  ...props
 }) => {
   const sizeClasses = {
     sm: 'px-5 py-1.5 text-sm',
@@ -76,18 +76,20 @@ const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <Link
-        href={href}
-        className={`${baseClasses} ${sizeClasses[size]} ${variantStyles[variant]} ${className}`}
-        onClick={onClick}
-      >
-        {children}
-      </Link>
+      <button onClick={onClick}>
+        <Link
+          href={href}
+          className={`${baseClasses} ${sizeClasses[size]} ${variantStyles[variant]} ${className}`}
+        >
+          {children}
+        </Link>
+      </button>
     );
   }
 
   return (
     <button
+      {...props}
       type={type}
       onClick={onClick}
       className={`

@@ -25,14 +25,23 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
   const [showSheet, setShowSheet] = useState(false);
   const { data: session } = useSession();
 
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
-    const fetchTimeSlots = async () => {
-      if (selectedDate) {
-        const savedSlots = await getTimeSlots(selectedDate);
-        setTimeSlots(savedSlots.sort());
-      }
-    };
-    fetchTimeSlots();
+    try {
+      setIsLoading(true)
+      const fetchTimeSlots = async () => {
+        if (selectedDate) {
+          const savedSlots = await getTimeSlots(selectedDate);
+          setTimeSlots(savedSlots.sort());
+        }
+      };
+      fetchTimeSlots();
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
   }, [selectedDate]);
 
   const addTimeSlot = async () => {
@@ -57,8 +66,12 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
-    <div className="relative mt-8">
+    <div className="my-8">
       <TimeSlotsList
         timeSlots={timeSlots}
         onRemove={removeTimeSlot}
@@ -66,9 +79,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
         onTimeSelect={setSelectedTime}
       />
 
-      {session?.user && (
-        <>
-          {/* Floating Action Button */}
+        {/* <>
           <motion.button
             onClick={() => setShowSheet(true)}
             whileTap={{ scale: 0.9 }}
@@ -77,18 +88,15 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
             <Plus size={28} />
           </motion.button>
 
-          {/* Bottom Sheet */}
           <AnimatePresence>
             {showSheet && (
               <>
-                {/* Dimmed background */}
                 <motion.div
                   className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
                   initial={{ opacity: 0 }}
                   onClick={() => setShowSheet(false)}
                 />
 
-                {/* Sheet panel */}
                 <Modal overlayClassName="max-w-md w-full" onClose={() => setShowSheet(false)}>
                   <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center md:left-1/2 md:w-[420px] md:-translate-x-1/2">
                     <button
@@ -110,7 +118,6 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
                       </p>
                     )}
 
-                    {/* Glass Input */}
                     <div className="mb-6 w-full max-w-sm">
                       <label className="mb-2 block text-sm text-gray-400">Выберите время</label>
                       <div className="relative">
@@ -132,8 +139,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
               </>
             )}
           </AnimatePresence>
-        </>
-      )}
+        </> */}
     </div>
   );
 };

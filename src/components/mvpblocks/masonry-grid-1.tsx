@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const galleryItems = [
   { src: '/nails/nails1.webp', alt: 'Молочный гель на коротком квадрате + топ молочная вуаль', description: 'Классика в современном исполнении • Гель-лак' },
@@ -28,15 +29,22 @@ export default function MasonryGallery() {
 
   return (
     <section id='gallery' className="min-h-screen px-4 py-20 md:px-6 container mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <h2 className="text-center mb-20 bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight">
           Наши работы
         </h2>
+      </motion.div>
       <div className="columns-2 md:columns-3 lg:columns-4 gap-5 sm:gap-6 lg:gap-8 space-y-5 sm:space-y-6 lg:space-y-8">
         {galleryItems.map((item, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.05 }}
             viewport={{ once: true }}
             className="group relative overflow-hidden rounded-2xl shadow-xl shadow-black/30 break-inside-avoid cursor-pointer"
@@ -44,11 +52,11 @@ export default function MasonryGallery() {
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {/* Фото */}
-            <img
+            <Image
               src={item.src}
               alt={item.alt}
-              width={200}
-              height={200}
+              width={400}
+              height={400}
               className="w-full h-auto object-cover transition-all duration-700 ease-out group-hover:scale-110"
             />
 

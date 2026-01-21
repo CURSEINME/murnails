@@ -1,60 +1,56 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Masonry from 'react-masonry-css';
 import Image from 'next/image';
 
 const galleryItems = [
-  { id: 1, src: '/fate1.jpg', alt: 'Micro French', aspect: '3/4' },
-  { id: 2, src: '/fate2.jpg', alt: 'Chrome Pink', aspect: '3/4' },
-  { id: 3, src: '/fate3.jpg', alt: 'Nude Glossy', aspect: '4/5' },
-  { id: 4, src: '/fate4.jpg', alt: 'Geometric Lines', aspect: '1/1' },
-  { id: 5, src: '/fate1.jpg', alt: 'Micro French', aspect: '3/4' },
-  { id: 6, src: '/fate2.jpg', alt: 'Chrome Pink', aspect: '4/5' },
-  { id: 7, src: '/fate3.jpg', alt: 'Nude Glossy', aspect: '3/4' },
-  { id: 8, src: '/fate4.jpg', alt: 'Geometric Lines', aspect: '1/1' },
-  { id: 9, src: '/fate4.jpg', alt: 'Geometric Lines', aspect: '3/4' },
-  { id: 10, src: '/fate4.jpg', alt: 'Geometric Lines', aspect: '4/5' },
-  // добавь 10–20 своих фото
+  { src: '/nails/nails1.webp', alt: 'Молочный гель на коротком квадрате + топ молочная вуаль', description: 'Классика в современном исполнении • Гель-лак' },
+  { src: '/nails/nails13.webp', alt: 'Звериный принт', description: 'Прозрачный гель и крупные пятна леопарда' },
+  { src: '/nails/nails16.webp', alt: 'Нюд', description: 'Классический нежно - розовый нюд с небольшим акцентом' },
+  { src: '/nails/nails2.webp', alt: 'Выбор для тех, кто любит «по-ярче»', description: 'Глянцевый красный + акцент на черном матовом' },
+  { src: '/nails/nails6.webp', alt: 'Минимализм, который говорит сам за себя', description: 'Молочный квадрат — нежно, стильно, универсально' },
+  { src: '/nails/nails7.webp', alt: 'Эстетика', description: 'Красота и ухоженность в аккуратном, практически незаметном исполнении' },
+  { src: '/nails/nails17.webp', alt: 'Мужской маникюр', description: 'Аккуратность, ухоженность то, на что обратит внимание любая девушка' },
+  { src: '/nails/nails4.webp', alt: 'Френч - геометрия', description: '' },
+  { src: '/nails/nails12.webp', alt: 'Классика', description: 'Красный на коротком овале - old money' },
+  { src: '/nails/nails9.webp', alt: 'Идеальный квадрат', description: 'Те самые «инстаграмные» параллели и арки' },
+  { src: '/nails/nails14.webp', alt: 'Фуксия', description: 'Ярко, стильно, дорого' },
+  { src: '/nails/nails5.webp', alt: 'Бежевый - денежный цвет в этом месяце', description: 'Сочетание серого с молочным + золотая поталь' },
+  { src: '/nails/nails8.webp', alt: 'Лунный камень', description: 'Дизайн, не может не зацепить , акцентные линии металической краской' },
+  { src: '/nails/nails10.webp', alt: 'Трендовое масло', description: 'Гель «сливочное масло» + жемчужная втирка' },
+  { src: '/nails/nails15.webp', alt: 'Дизайн без дизайна', description: 'Гель с сухоцветами на среднем квадрате' },
+  { src: '/nails/nails3.webp', alt: '', description: 'Интересная альтернатива классическому френчу' },
+  { src: '/nails/nails11.webp', alt: 'Когти', description: 'Или выбор тех, кто любит длину и остроту?' },
 ];
 
+const breakpointColumnsObj = {
+  default: 4,
+  1024: 3,
+  768: 2,
+  500: 1
+};
+
 export default function GallerySection() {
-  return (
-    <section className="py-20 ">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center mb-20 bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight">
-          Наши работы
-        </h2>
-
-        <div className="columns-2 md:columns-3 lg:columns-4 gap-5 sm:gap-6 lg:gap-8 space-y-5 sm:space-y-6 lg:space-y-8">
-          {galleryItems.map((item) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7 }}
-              className="group relative overflow-hidden rounded-2xl shadow-xl shadow-black/40 break-inside-avoid cursor-pointer"
-            >
-              <Image
-                src={item.src}
-                alt={item.alt}
-                width={800}          // примерные размеры, можно оставить без
-                height={1200}        // главное — не указывать фиксированный aspect
-                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
-
-              {/* Overlay с названием на hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                <div className="text-white">
-                  <p className="text-lg font-medium tracking-wide">{item.alt}</p>
-                  <p className="text-sm text-pink-300 opacity-80">Premium Gel · 2026</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+ return (
+  <section  className='container mx-auto'>
+    <Masonry
+      breakpointCols={breakpointColumnsObj}
+      className="flex w-auto gap-4"
+      columnClassName="flex flex-col gap-4"
+    >
+      {galleryItems.map((item, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: index * 0.05 }}
+          className="rounded-2xl shadow-xl overflow-hidden"
+        >
+          <img src={item.src} alt={item.alt} className="w-full h-auto object-cover" />
+        </motion.div>
+      ))}
+    </Masonry>
+  </section>
+ )
+};

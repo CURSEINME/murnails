@@ -32,31 +32,36 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-7 gap-1 mb-4">
-      {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
-        <div
-          key={day}
-          className="text-center font-semibold p-2 h-10 w-10 flex items-center justify-center"
-        >
-          {day}
-        </div>
-      ))}
+    <div className="">
+      {/* Weekdays */}
+      <div className="mb-2 grid grid-cols-7 gap-1 text-sm uppercase tracking-wide text-white/50">
+        {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day, index) => (
+          <div
+            key={day}
+            className={`flex h-8 w-8 items-center justify-center font-semibold
+              ${index >= 5 ? "text-pink-400/80" : ""}
+            `}
+          >
+            {day}
+          </div>
+        ))}
+      </div>
 
-      {calendar.map((week, i) => (
-        <React.Fragment key={i}>
-          {week.map((dayInfo, j) => {
-            const hasSlots = hasSlotsOnDate(dayInfo.date);
-            return (
+      {/* Days */}
+      <div className="grid grid-cols-7 gap-1">
+        {calendar.map((week, i) => (
+          <React.Fragment key={i}>
+            {week.map((dayInfo, j) => (
               <DayCell
-                key={j}
+                key={`${i}-${j}`}
                 dayInfo={dayInfo}
                 onSelect={onDateSelect}
-                hasAvailableSlots={hasSlots}
+                hasAvailableSlots={hasSlotsOnDate(dayInfo.date)}
               />
-            );
-          })}
-        </React.Fragment>
-      ))}
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 };

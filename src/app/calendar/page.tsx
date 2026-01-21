@@ -1,52 +1,53 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from '../components/Calendar/Calendar';
 import TimeSlotsAdmin from '../components/TimeSlots/TimeSlotsAdmin';
 import Button from '../components/UI/Button';
-import { redirect, RedirectType, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { getDateSlots } from '../../../actions/timeSlots';
-import Loading from '../components/UI/Loading';
 import { motion } from 'framer-motion';
-import { Plus, X } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import Stepper, { Step } from '@/components/Stepper';
+import { sendMail } from '../../../actions/email';
+import { toast } from 'react-toastify';
+import ContactStep from '../components/steps/ContactStep';
 
-function CalendarContent() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [dateSlots, setDateSlots] = useState<Date[]>([]);
+interface TimeSlotsProps {
+  selectedDate: Date | null;
+  selectedTime: string | null;
+  setSelectedTime: (time: string) => void;
+}
 
-  const searchParams = useSearchParams();
+function TimeSlotsStep({ selectedDate, selectedTime, setSelectedTime}: TimeSlotsProps) {
+  return (
+    <div className="flex flex-col flex-1">
+      <div>
+        <h2 className="mb-6 text-xl font-semibold text-pink-400">
+          Свободное время на{' '}
+          {selectedDate?.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })}
+        </h2>
+          <TimeSlotsAdmin
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+          />  
+      </div>
+    </div>
+  )
+}
 
-  const [showAdmin, setShowAdmin] = useState(false);
-  const { data: session } = useSession();
+interface CalendarProps {
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void
+}
 
-  const handleDateSelect = (date: Date) => {
-    setSelectedDate(date);
-    setSelectedTime(null);
-  };
-
-  const handleMonthChange = (date: Date) => {
-    setCurrentMonth(date);
-    setSelectedDate(null);
-    setSelectedTime(null);
-  };
-
-  const handleSelectedTime = (time: string) => {
-    setSelectedTime(time);
-  };
-
-  const handleClick = () => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    params.set('day', selectedDate?.getDay()?.toString() || '');
-    params.set('month', selectedDate?.getMonth()?.toString() || '');
-    params.set('year', selectedDate?.getFullYear()?.toString() || '');
-    params.set('time', selectedTime || '');
-
-    redirect(`/contact?${params.toString()}`, RedirectType.push);
-  };
+function CalendarStep({selectedDate, setSelectedDate}: CalendarProps) {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [dateSlots, setDateSlots] = useState<Date[]>([])
 
   useEffect(() => {
     const getDates = async () => {
@@ -56,97 +57,150 @@ function CalendarContent() {
     getDates();
   }, []);
   return (
-    <div className="custom-container flex h-full flex-col items-center lg:justify-center">
-      <div className="grid w-full grid-cols-1 gap-10 lg:grid-cols-2">
-        {/* Блок календаря */}
-        <div className="rounded-3xl border border-white/20 bg-white/10 p-8 shadow-md">
-          <h2 className="mb-6 text-center text-2xl font-semibold text-white">Выберите дату</h2>
-          <Calendar
-            currentMonth={currentMonth}
-            selectedDate={selectedDate}
-            onDateSelect={handleDateSelect}
-            onMonthChange={handleMonthChange}
-            dateSlots={dateSlots}
-          />
-        </div>
-
-        {/* Блок слотов */}
-        <div className="flex flex-col justify-between rounded-3xl border border-white/20 bg-white/10 p-8 shadow-md">
-          {selectedDate ? (
-            <>
-              <div>
-                <h2 className="mb-6 text-xl font-semibold text-pink-400">
-                  Свободное время на{' '}
-                  {selectedDate.toLocaleDateString('ru-RU', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </h2>
-                <TimeSlotsAdmin
-                  selectedDate={selectedDate}
-                  selectedTime={selectedTime}
-                  setSelectedTime={handleSelectedTime}
-                />
-              </div>
-              {selectedTime && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-8 rounded-2xl border border-white/20 bg-white/10 p-6 text-center shadow-lg backdrop-blur-xl"
-                >
-                  <p className="mb-4 text-gray-200">
-                    Вы выбрали: <span className="font-semibold text-pink-400">{selectedTime}</span>{' '}
-                    на{' '}
-                    <span className="font-semibold text-pink-400">
-                      {selectedDate?.toLocaleDateString('ru-RU')}
-                    </span>
-                  </p>
-                  <Button onClick={() => console.log('confirm')} variant="primary">
-                    Подтвердить выбор
-                  </Button>
-                </motion.div>
-              )}
-            </>
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center text-gray-300">
-              <p className="mb-4">Выберите дату в календаре</p>
-              <svg
-                className="h-12 w-12 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {selectedDate && (
-        <motion.button
-          onClick={() => setShowAdmin((prev) => !prev)}
-          whileTap={{ scale: 0.9 }}
-          className="fixed right-6 bottom-6 z-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 p-3 shadow-[0_0_10px_rgba(236,72,153,0.8)] transition hover:shadow-[0_0_20px_rgba(236,72,153,1)] lg:hidden"
-        >
-          {showAdmin ? <X size={28} /> : <Plus size={28} />}
-        </motion.button>
-      )}
+    <div className="rounded-3xl">
+      <h2 className="mb-6 text-center text-2xl font-semibold text-white">Выберите дату</h2>
+      <Calendar
+        currentMonth={currentMonth}
+        selectedDate={selectedDate}
+        onDateSelect={setSelectedDate}
+        onMonthChange={setCurrentMonth}
+        dateSlots={dateSlots}
+      />
     </div>
-  );
+  )
 }
 
 const Page = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({ name: '', phone: '' });
+
+  const searchParams = useSearchParams();
+  const router = useRouter()
+
+  const payload = configureFinalPayload()
+
+  const [currentStep, setCurrentStep] = useState(1)
+
+  function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  }
+
+  function configureFinalPayload() {
+    if (!selectedDate || !selectedTime) return null
+
+    const day = selectedDate?.getDate().toString() || ""
+    const month = selectedDate?.getMonth().toString() || ""
+    const year = selectedDate?.getFullYear().toString() || ""
+    const time = selectedTime || ''
+    const service = searchParams.get("service") || ''
+    const tel = formData.phone
+    const name = formData.name
+
+    return {
+      date: {day, month, year, time},
+      service,
+      tel,
+      name
+    }
+  }
+
+  async function handleStepChange(step: number) {
+    if (step < currentStep) {
+      if (step < 3) {
+        setFormData({name: '', phone: ''})
+      }
+
+      if (step < 2) {
+        setSelectedTime(null)
+      }
+    }
+
+    setCurrentStep(step)
+
+    if (step == 3) {
+      const params = new URLSearchParams(searchParams.toString());
+  
+      params.set('day', selectedDate?.getDate()?.toString() || '');
+      params.set('month', selectedDate?.getMonth()?.toString() || '');
+      params.set('year', selectedDate?.getFullYear()?.toString() || '');
+      params.set('time', selectedTime || '');
+  
+      router.push(`/calendar?${params.toString()}`)
+    }
+    
+    if (step == 4 && payload) {
+      console.log(payload)
+      try {
+        const result = { ok: true, message: 'test'}
+
+        if (result.ok) {
+          toast.success("✅ Ваша заявка успешно отправлена!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setFormData({
+            name: "",
+            phone: "",
+          });
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        toast.error("❌ Произошла ошибка при отправке", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        console.error("Ошибка:", error);
+      }
+    }
+  }
+
   return (
-    <Suspense fallback={<Loading />}>
-      <CalendarContent />
-    </Suspense>
+    <Stepper
+      contentClassName='min-h-[500px]'
+      stepCircleContainerClassName='max-w-[800px]! backdrop-blur-md bg-black/40'
+      initialStep={1}
+      onStepChange={(step) => handleStepChange(step)}
+      onFinalStepCompleted={() => redirect('/')}
+      nextButtonProps={{
+        disabled:
+          (currentStep === 1 && !selectedDate) ||
+          (currentStep === 2 && !selectedTime) ||
+          (currentStep === 3 && (!formData.name || !formData.phone)),
+      }}
+      backButtonText="Назад"
+      nextButtonText="Далее"
+      disableStepIndicators
+    >
+      <Step>
+        <CalendarStep selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+      </Step>
+      <Step>
+        <TimeSlotsStep setSelectedTime={setSelectedTime} selectedTime={selectedTime} selectedDate={selectedDate}/>
+      </Step>
+      <Step>
+        <ContactStep handleChange={onChange} {...formData}/>
+      </Step>
+      <Step>
+        <h2>Final Step</h2>
+        <p>You made it!</p>
+      </Step>
+    </Stepper>
   );
 };
 

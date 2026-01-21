@@ -1,4 +1,5 @@
 import { DayCellProps } from "@/types/calendar";
+import { motion } from "framer-motion";
 
 const DayCell: React.FC<DayCellProps> = ({
   dayInfo,
@@ -6,7 +7,7 @@ const DayCell: React.FC<DayCellProps> = ({
   hasAvailableSlots,
 }) => {
   if (!dayInfo.date) {
-    return <div className="invisible h-10 w-10"></div>;
+    return <div className="h-10 w-10" />;
   }
 
   const handleClick = () => {
@@ -15,23 +16,39 @@ const DayCell: React.FC<DayCellProps> = ({
     }
   };
 
+  const isDisabled = !dayInfo.isCurrentMonth;
+
   return (
-    <div className="flex justify-center items-center h-10 w-10">
-      <div
+    <div className="flex h-10 w-10 items-center justify-center">
+      <motion.button
+        type="button"
         onClick={handleClick}
-        className={`h-10 w-10 flex items-center justify-center rounded-full cursor-pointer transition-colors
-          ${dayInfo.isToday ? "bg-pink-700 text-white" : ""}
-          ${dayInfo.isSelected ? "bg-pink-400 text-white font-bold" : ""}
-          ${!dayInfo.isCurrentMonth ? "text-gray-500" : "text-gray-200"}
+        disabled={isDisabled}
+        whileTap={!isDisabled ? { scale: 0.9 } : undefined}
+        className={`
+          relative flex h-9 w-9 items-center justify-center rounded-full
+          text-sm font-medium transition-all outline-none
           ${
-            hasAvailableSlots && !dayInfo.isSelected
-              ? "ring-2 ring-pink-400"
-              : ""
+            dayInfo.isSelected
+              ? 'bg-pink-500 text-white shadow-[0_0_18px_rgba(236,72,153,0.55)]'
+              : dayInfo.isToday
+              ? 'border border-pink-500/50 text-pink-400'
+              : 'text-white/70'
           }
-          hover:bg-gray-800 active:bg-gray-700 relative`}
+          ${
+            isDisabled
+              ? 'cursor-default text-white/25'
+              : 'cursor-pointer hover:bg-white/10'
+          }
+        `}
       >
+        {/* availability dot */}
+        {hasAvailableSlots && !dayInfo.isSelected && !isDisabled && (
+          <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-pink-400" />
+        )}
+
         {dayInfo.date.getDate()}
-      </div>
+      </motion.button>
     </div>
   );
 };

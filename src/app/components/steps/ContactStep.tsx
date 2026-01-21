@@ -1,81 +1,6 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
-import { sendMail } from "../../../actions/email";
-import Loading from "../components/UI/Loading";
-import { toast } from "react-toastify";
-
-function ContactContent() {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-  });
-
-  const searchParams = useSearchParams();
-  const day = searchParams.get("day") || "";
-  const month = searchParams.get("month") || "";
-  const year = searchParams.get("year") || "";
-  const time = searchParams.get("time") || "";
-  const service = searchParams.get("service") || "";
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    console.log();
-    e.preventDefault();
-    try {
-      const result = await sendMail({
-        date: [day, time, month, year],
-        service,
-        tel: formData.phone,
-        name: formData.name,
-      });
-
-      if (result.ok) {
-        toast.success("✅ Ваша заявка успешно отправлена!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        // Очистка формы после успешной отправки
-        setFormData({
-          name: "",
-          phone: "",
-        });
-      } else {
-        throw new Error(result.message);
-      }
-    } catch (error) {
-      toast.error("❌ Произошла ошибка при отправке", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-      console.error("Ошибка:", error);
-    } finally {
-      // setIsSubmitting(false);
-    }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
+export default function ContactStep({handleChange, phone, name}: {handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, phone: string, name: string}) {
   return (
-    <div className="h-[calc(100vh-84px)] grid place-items-center">
-      <div className="max-w-md mx-auto bg-neutral-800/70 py-12 px-4 sm:px-6 lg:px-8 rounded-xl">
+      <div className="max-w-md mx-auto ">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-pink-400 mb-2">
             Свяжитесь с нами
@@ -85,7 +10,7 @@ function ContactContent() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6">
           <div className="space-y-4">
             {/* Поле имени */}
             <div>
@@ -100,7 +25,7 @@ function ContactContent() {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={name}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-neutral-700/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
@@ -137,7 +62,7 @@ function ContactContent() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  value={formData.phone}
+                  value={phone}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-neutral-700/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
@@ -160,16 +85,6 @@ function ContactContent() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Кнопка отправки */}
-          <div>
-            <button
-              type="submit"
-              className="mt-auto w-full px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-medium rounded-lg transition-colors duration-300 shadow-lg hover:shadow-pink-500/20"
-            >
-              Отправить заявку
-            </button>
           </div>
         </form>
 
@@ -199,16 +114,5 @@ function ContactContent() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
-
-const Page = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <ContactContent />
-    </Suspense>
-  );
-};
-
-export default Page;

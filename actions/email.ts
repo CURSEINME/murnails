@@ -3,7 +3,7 @@
 import nodemailer from "nodemailer";
 
 type MailData = {
-  date: [day: string, time: string, month: string, year: string];
+  date: {day: string, time: string, month: string, year: string};
   service: string;
   tel: string;
   name: string;
@@ -11,7 +11,7 @@ type MailData = {
 
 export async function sendMail(data: MailData) {
   const { date, service, tel, name } = data;
-  const [day, time, month, year] = date;
+  const {day, time, month, year} = date;
 
   const months = [
     "января",
