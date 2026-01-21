@@ -1,8 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Masonry from 'react-masonry-css';
-import Image from 'next/image';
 
 const galleryItems = [
   { src: '/nails/nails1.webp', alt: 'Молочный гель на коротком квадрате + топ молочная вуаль', description: 'Классика в современном исполнении • Гель-лак' },
@@ -34,7 +32,7 @@ const breakpointColumnsObj = {
 export default function GallerySection() {
  return (
   <section  className='container mx-auto'>
-    <Masonry
+    {/* <Masonry
       breakpointCols={breakpointColumnsObj}
       className="flex w-auto gap-4"
       columnClassName="flex flex-col gap-4"
@@ -50,7 +48,7 @@ export default function GallerySection() {
           <img src={item.src} alt={item.alt} className="w-full h-auto object-cover" />
         </motion.div>
       ))}
-    </Masonry>
+    </Masonry> */}
   </section>
  )
 };
