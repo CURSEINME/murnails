@@ -41,38 +41,38 @@ const defaultValues: AboutUsProps['values'] = [
   {
     title: 'Перфекционизм',
     description:
-      'Каждая деталь — от формы до покрытия — выполняется с ювелирной точностью.',
+      'Я уделяю внимание каждой детали — от идеальной формы до безупречного покрытия.',
     icon: 'Gem',
   },
   {
     title: 'Индивидуальность',
     description:
-      'Мы создаём маникюр, который подчёркивает именно вашу уникальность и стиль.',
+      'Я создаю маникюр, который подчёркивает именно твою уникальность и стиль.',
     icon: 'Crown',
   },
   {
     title: 'Забота',
     description:
-      'Здоровье ногтей для нас важнее всего — только безопасные материалы и стерильность.',
+      'Здоровье ногтей для меня на первом месте — стерильность, безопасность и качественные материалы.',
     icon: 'Heart',
   },
   {
     title: 'Вдохновение',
     description:
-      'Каждый визит — маленькое событие, которое поднимает настроение и уверенность.',
+      'Каждый визит — это маленький ритуал красоты, после которого хочется улыбаться.',
     icon: 'Sparkles',
   },
 ];
 
 export default function AboutUsSalon() {
   const aboutData = {
-    title: 'О нашем салоне',
+    title: 'Обо мне',
     subtitle:
-      'Место, где рождается идеальный маникюр и настоящее удовольствие от красоты',
+      'Маникюр как отражение твоей индивидуальности',
     mission:
-      'Мы делаем так, чтобы каждая женщина выходила из нашего салона с ощущением роскоши, уверенности и любви к себе. Красивые ногти — это не просто уход, это ритуал заботы о себе.',
+      'Я делаю так, чтобы каждая девушка уходила с ощущением уверенности, ухоженности и любви к себе. Для меня маникюр — это не просто услуга, а забота, внимание и эстетика в деталях.',
     vision:
-      'Создать пространство, где маникюр — это искусство, а каждая клиентка чувствует себя особенной. Мы хотим, чтобы наш салон ассоциировался с лучшим, что может быть в индустрии красоты.',
+      'Я создаю место, где маникюр — это искусство, а каждая клиентка чувствует себя особенной. Хочу, чтобы мой подход ассоциировался с качеством, доверием и безупречным результатом.',
     values: defaultValues,
   };
 
@@ -80,12 +80,12 @@ export default function AboutUsSalon() {
   const missionRef = useRef(null);
   const valuesRef = useRef(null);
 
-  const titleInView = useInView(titleRef, { once: true, amount: 0.1, margin: "-100px" });
-  const missionInView = useInView(missionRef, { once: true, amount: 0.1, });
-  const valuesInView = useInView(valuesRef, { once: true, amount: 0.1, });
+  const titleInView = useInView(titleRef, { once: true, amount: 0.1, margin: '-100px' });
+  const missionInView = useInView(missionRef, { once: true, amount: 0.1 });
+  const valuesInView = useInView(valuesRef, { once: true, amount: 0.1 });
 
   return (
-    <section id='about-us' className="relative w-full overflow-hidden py-16 md:py-24">
+    <section id="about-us" className="relative w-full overflow-hidden py-16 md:py-24">
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         {/* Заголовок */}
         <motion.div
@@ -111,19 +111,19 @@ export default function AboutUsSalon() {
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             className="relative z-10 grid gap-8 md:gap-12 md:grid-cols-2"
           >
-            {/* Блок Миссия */}
+            {/* Миссия */}
             <motion.div
               whileHover={{ y: -6, scale: 1.02 }}
               className="group relative overflow-hidden rounded-3xl bg-card/70 backdrop-blur-md border border-border p-8 md:p-10 hover:bg-card/80 transition-all duration-300"
             >
-              <BorderBeam  duration={12} size={300} className="via-primary/40 from-transparent to-transparent" />
+              <BorderBeam duration={12} size={300} className="via-primary/40 from-transparent to-transparent" />
 
               <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 backdrop-blur-md">
                 <Sparkles className="h-8 w-8 text-primary" />
               </div>
 
-              <h2 className="mb-4 bg-clip-text text-3xl font-bold text-primary">
-                Наша миссия
+              <h2 className="mb-4 text-3xl font-bold text-primary">
+                Моя миссия
               </h2>
 
               <p className="text-muted-foreground/90 text-lg leading-relaxed">
@@ -131,7 +131,7 @@ export default function AboutUsSalon() {
               </p>
             </motion.div>
 
-            {/* Блок Видение */}
+            {/* Видение */}
             <motion.div
               whileHover={{ y: -6, scale: 1.02 }}
               className="group relative overflow-hidden rounded-3xl bg-card/70 backdrop-blur-md border border-border p-8 md:p-10 hover:bg-card/80 transition-all duration-300"
@@ -143,7 +143,7 @@ export default function AboutUsSalon() {
               </div>
 
               <h2 className="mb-4 text-3xl font-bold text-primary">
-                Наше видение
+                Моё видение
               </h2>
 
               <p className="text-muted-foreground/90 text-lg leading-relaxed">
@@ -153,7 +153,7 @@ export default function AboutUsSalon() {
           </motion.div>
         </div>
 
-        {/* Ценности */}
+        {/* Принципы */}
         <div ref={valuesRef} className="mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -162,10 +162,10 @@ export default function AboutUsSalon() {
             className="mb-10 md:mb-12 text-center"
           >
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              Наши принципы
+              Мои принципы
             </h2>
             <p className="text-muted-foreground mx-auto mt-5 max-w-2xl text-lg">
-              То, что важно для нас в каждом прикосновении, в каждом покрытии
+              То, что важно для меня в каждом движении и каждом результате
             </p>
           </motion.div>
 

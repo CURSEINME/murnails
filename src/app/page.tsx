@@ -1,5 +1,3 @@
-'use client'
-
 import GradientHero from "@/components/mvpblocks/gradient-hero";
 import TestimonialsCarousel from "@/components/mvpblocks/testimonials-carousel";
 import AboutUsSalon from "@/components/mvpblocks/about-us-1";
@@ -15,8 +13,8 @@ export default function Home() {
         <AboutUsSalon/> 
 
         <TestimonialsCarousel
-          title="Наши любимые отзывы"
-          subtitle="Реальные слова наших клиенток"
+          title="Мои любимые отзывы"
+          subtitle="Реальные слова моих клиенток"
           autoplaySpeed={5000}
           className="mx-auto"
         />

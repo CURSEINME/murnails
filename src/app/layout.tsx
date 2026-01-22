@@ -1,40 +1,19 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { Ubuntu_Sans } from 'next/font/google';
 import { Comfortaa } from 'next/font/google';
-import { Nunito } from 'next/font/google';
-import { Roboto } from 'next/font/google';
 import './globals.css';
-import Header from './components/UI/Header';
 import { Providers } from './providers';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BackgroundWrapper } from './components/BackgroundWrapper';
 import { NavbarDemo } from './components/UI/Navbar';
-
-const ubuntu = Ubuntu_Sans({
-  weight: ['300', '400', '500', '700'],
-  variable: '--font-ubuntu',
-  subsets: ['latin'],
-});
-
-const roboto = Roboto({
-  weight: ['400', '500', '700'],
-  subsets: ['latin'],
-  variable: '--font-roboto',
-});
+import ScrollFix from './components/ScrollFix';
 
 const comfortaa = Comfortaa({
   weight: ['400', '500', '600', '700'],
   variable: '--font-comfortaa',
   subsets: ['latin'],
-});
-
-const nunito = Nunito({
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-nunito',
 });
 
 export const metadata: Metadata = {
@@ -51,6 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <>
         <body className={`${comfortaa.className} relative antialiased`}>
+            <ScrollFix/>
             <div id='bg-root'/>
             <BackgroundWrapper/>
             <div id='app-root'>

@@ -25,10 +25,8 @@ const galleryItems = [
 ];
 
 export default function MasonryGallery() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
   return (
-    <section id='gallery' className="min-h-screen px-4 py-20 md:px-6 container mx-auto">
+    <div id='gallery' className="container mx-auto min-h-screen px-4 py-20 md:px-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -36,38 +34,32 @@ export default function MasonryGallery() {
         transition={{ duration: 0.8 }}
       >
         <h2 className="text-center mb-20 bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight">
-          Наши работы
+          Мои работы
         </h2>
       </motion.div>
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-5 sm:gap-6 lg:gap-8 space-y-5 sm:space-y-6 lg:space-y-8">
+      <div className="columns-2 gap-4 space-y-4 transition-all sm:columns-2 md:columns-3 lg:columns-4">
         {galleryItems.map((item, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.05 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
             viewport={{ once: true }}
-            className="group relative overflow-hidden rounded-2xl shadow-xl shadow-black/30 break-inside-avoid cursor-pointer"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            className="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out"
           >
-            {/* Фото */}
-            <Image
-              src={item.src}
-              alt={item.alt}
-              width={400}
-              height={400}
-              className="w-full h-auto object-cover transition-all duration-700 ease-out group-hover:scale-110"
-            />
+          <Image
+            src={item.src}
+            alt={item.alt}
+            width={600}
+            height={800}
+            className="w-full rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+          />
 
-            {/* Оверлей */}
             <div
               className={`absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent 
                 transition-all duration-500 ease-out
                 opacity-0 group-hover:opacity-100`}
             />
-
-            {/* Текст оверлея */}
             <div
               className={`absolute inset-0 flex flex-col justify-end p-6 text-white transition-all duration-500 ease-out
                 group-hover:opacity-100 group-hover:translate-y-0 opacity-0 translate-y-6`}
@@ -82,6 +74,6 @@ export default function MasonryGallery() {
           </motion.div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

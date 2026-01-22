@@ -24,7 +24,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
   return (
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold text-pink-400">
+      <h2 className="text-lg font-bold text-pink-400">
         {getMonthName(currentMonth)}
       </h2>
       <div className="flex space-x-2">

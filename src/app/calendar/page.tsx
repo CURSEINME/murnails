@@ -58,7 +58,7 @@ function CalendarStep({selectedDate, setSelectedDate}: CalendarProps) {
   }, []);
   return (
     <div className="rounded-3xl">
-      <h2 className="mb-6 text-center text-2xl font-semibold text-white">Выберите дату</h2>
+      <h2 className="mb-4 text-center text-xl font-semibold text-white">Выберите дату</h2>
       <Calendar
         currentMonth={currentMonth}
         selectedDate={selectedDate}
@@ -73,6 +73,8 @@ function CalendarStep({selectedDate, setSelectedDate}: CalendarProps) {
 const Page = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const [stepperKey, setStepperKey] = useState(0)
 
   const [formData, setFormData] = useState({ name: '', phone: '' });
 
@@ -170,13 +172,25 @@ const Page = () => {
     }
   }
 
+  async function handleReset() {
+    router.push('/')
+
+    await new Promise((resolve) => setTimeout(resolve, 2000)).then(() => setStepperKey(prev => prev + 1))
+
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setFormData({ name: '', phone: '' });
+    setCurrentStep(1);
+  }
+
   return (
     <Stepper
-      contentClassName='min-h-[500px]'
+      key={stepperKey}
+      contentClassName='min-h-[350px]'
       stepCircleContainerClassName='max-w-[800px]! backdrop-blur-md bg-black/40'
       initialStep={1}
       onStepChange={(step) => handleStepChange(step)}
-      onFinalStepCompleted={() => redirect('/')}
+      onFinalStepCompleted={handleReset}
       nextButtonProps={{
         disabled:
           (currentStep === 1 && !selectedDate) ||
@@ -197,8 +211,26 @@ const Page = () => {
         <ContactStep handleChange={onChange} {...formData}/>
       </Step>
       <Step>
-        <h2>Final Step</h2>
-        <p>You made it!</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center justify-center text-center space-y-6 py-10"
+        >
+          <h2 className="text-2xl md:text-3xl font-semibold text-white">
+            Запись успешно оформлена
+          </h2>
+
+          <p className="max-w-md text-muted-foreground text-base leading-relaxed">
+            Спасибо за доверие 🤍  
+            Я получила вашу заявку и свяжусь с вами в ближайшее время
+            для подтверждения записи.
+          </p>
+
+          <p className="text-sm text-gray-400">
+            Если понадобится что-то уточнить — вы всегда можете написать или позвонить.
+          </p>
+        </motion.div>
       </Step>
     </Stepper>
   );

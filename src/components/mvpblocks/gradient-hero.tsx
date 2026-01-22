@@ -29,9 +29,11 @@ export default function ManicureHero() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="mt-6 max-w-xl text-md sm:text-xl text-muted-foreground font-light mx-auto lg:mx-0"
             >
-              Аккуратный маникюр, стерильные инструменты и премиум материалы.  
-              Подчёркиваем естественную красоту твоих ногтей.
+              Я делаю аккуратный маникюр, работаю стерильными инструментами  
+              и использую только премиум-материалы.  
+              Подчёркиваю естественную красоту твоих ногтей.
             </motion.p>
+
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -52,20 +54,17 @@ export default function ManicureHero() {
               </Button>
 
               <Button
-                onClick={() => {
-                  document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
-                }}  
+                href='#gallery'
                 variant="secondary"
-                className=""
               >
-                Наши работы
-              </Button>
+                Мои работы
+              </Button>   
             </motion.div>
 
             <div className="mt-10 hidden md:flex flex-wrap gap-6 justify-center lg:justify-start text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-primary" />
-                4.9 рейтинг клиентов
+                Рейтинг клиентов 4.9
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-primary" />
@@ -73,7 +72,7 @@ export default function ManicureHero() {
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" />
-                Опытные мастера
+                Опытный мастер
               </div>
             </div>
           </div>

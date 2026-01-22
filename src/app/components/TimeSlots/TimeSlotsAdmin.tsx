@@ -79,11 +79,11 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
         onTimeSelect={setSelectedTime}
       />
 
-        {/* <>
+        <>
           <motion.button
             onClick={() => setShowSheet(true)}
             whileTap={{ scale: 0.9 }}
-            className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
+            className="fixed right-6 bottom-20 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
           >
             <Plus size={28} />
           </motion.button>
@@ -92,13 +92,13 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
             {showSheet && (
               <>
                 <motion.div
-                  className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+                  className="absolute inset-0 z-40 bg-black/40 backdrop-blur-sm"
                   initial={{ opacity: 0 }}
                   onClick={() => setShowSheet(false)}
                 />
 
                 <Modal overlayClassName="max-w-md w-full" onClose={() => setShowSheet(false)}>
-                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center md:left-1/2 md:w-[420px] md:-translate-x-1/2">
+                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center">
                     <button
                       onClick={() => setShowSheet(false)}
                       className="absolute top-4 right-6 text-gray-400 transition-colors hover:text-pink-400"
@@ -139,7 +139,7 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
               </>
             )}
           </AnimatePresence>
-        </> */}
+        </>
     </div>
   );
 };

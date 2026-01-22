@@ -16,7 +16,7 @@ const TimeSlotsList: React.FC<TimeSlotsListProps> = ({
   onTimeSelect,
 }) => {
   return (
-    <div className="md:grid-cols- grid grid-cols-3 gap-2">
+    <div className="max-h-[250px] overflow-auto grid grid-cols-3 sm:grid-cols-5 gap-2">
       <AnimatePresence mode="popLayout">
         {timeSlots.length > 0 ? (
           timeSlots.map((time) => (

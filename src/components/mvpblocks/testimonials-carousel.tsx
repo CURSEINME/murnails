@@ -9,44 +9,30 @@ import { Quote } from 'lucide-react';
 
 const testimonialsCompact = [
   {
-    text: "Просто невероятные втирки и зеркальное покрытие! Держится 3+ недели без сколов 💅✨",
-    imageSrc: "/images/manicure1.jpg", // или используй Unsplash как раньше
+    text: "Очень аккуратная работа и идеальная форма. Покрытие держится больше трёх недель без единого скола.",
     name: "Алина К.",
-    username: "@alina_nails_love"
-    // role убрали совсем
   },
   {
-    text: "Самый аккуратный маникюр в городе, стерильность на высоте. Ухожу всегда счастливая 🥰",
-    imageSrc: "/images/manicure2.jpg",
+    text: "Редко пишу отзывы, но здесь невозможно не отметить — стерильность, внимание к деталям и спокойная атмосфера.",
     name: "Виктория М.",
-    username: "@vika_m_777"
   },
   {
-    text: "Свадебный дизайн с фольгой и стразами — все гости в восторге! Спасибо огромное 💍",
-    imageSrc: "/images/manicure3.jpg",
+    text: "Делала маникюр к важному событию — результат превзошёл ожидания. Всё выглядело очень дорого и аккуратно.",
     name: "София Р.",
-    username: "@sofia_wedding22"
   },
   {
-    text: "Запись онлайн без ожидания, покрытие держится реально долго — 4 недели 🔥",
-    imageSrc: "/images/manicure4.jpg",
+    text: "Удобная запись, без ожиданий. Маникюр носится отлично, даже через месяц выглядит ухоженно.",
     name: "Марина П.",
-    username: "@marina_petrova"
   },
   {
-    text: "Идеальный нюд и тончайшие дизайны. Мастер — просто волшебница 🌸",
-    imageSrc: "/images/manicure5.jpg",
-    name: "Катя С.",
-    username: "@katy_smileee"
-  }
+    text: "Идеальный нюд — именно такой, какой я искала. Минимализм, вкус и абсолютная аккуратность.",
+    name: "Екатерина С.",
+  },
 ];
-interface TestimonialProps {
+interface TestimonialProps {  
   testimonials?: {
     text: string;
-    imageSrc: string;
     name: string;
-    username: string;
-    role?: string;
   }[];
   title?: string;
   subtitle?: string;
@@ -124,7 +110,7 @@ export default function TestimonialsCarousel({
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="border-border from-secondary/20 to-card relative h-full w-[330px] max-w-md rounded-2xl border bg-gradient-to-b p-6 shadow-md backdrop-blur-sm"
+                  className="border-border from-secondary/20 to-card relative h-full w-[330px] flex flex-col max-w-md rounded-2xl border bg-gradient-to-b p-6 shadow-md backdrop-blur-sm"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
@@ -154,13 +140,9 @@ export default function TestimonialsCarousel({
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 + index * 0.05 }}
                     viewport={{ once: true }}
-                    className="border-border/40 mt-auto flex items-center gap-3 border-t pt-2"
+                    className="border-border/40 flex items-center gap-3 border-t pt-2 mt-auto"
                   >
                     <Avatar className="border-border ring-primary/10 ring-offset-background h-10 w-10 border ring-2 ring-offset-1">
-                      <AvatarImage
-                        src={testimonial.imageSrc}
-                        alt={testimonial.name}
-                      />
                       <AvatarFallback>
                         {testimonial.name.charAt(0)}
                       </AvatarFallback>
@@ -169,7 +151,7 @@ export default function TestimonialsCarousel({
                       <h4 className="text-foreground font-medium whitespace-nowrap">
                         {testimonial.name}
                       </h4>
-                      <div className="flex items-center gap-2">
+                      {/* <div className="flex items-center gap-2">
                         <p className="text-primary/80 text-sm whitespace-nowrap">
                           {testimonial.username}
                         </p>
@@ -183,7 +165,7 @@ export default function TestimonialsCarousel({
                             </p>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </motion.div>
                 </motion.div>
