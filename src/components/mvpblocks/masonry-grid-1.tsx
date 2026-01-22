@@ -41,19 +41,19 @@ export default function MasonryGallery() {
         {galleryItems.map((item, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out"
+            // initial={{ opacity: 0, y: 30 }}
+            // whileInView={{ opacity: 1, y: 0 }}
+            // transition={{ duration: 0.4, delay: index * 0.1 }}
+            // viewport={{ once: true }}
+            className="group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ease-in-out break-inside-avoid"
           >
-          <Image
-            src={item.src}
-            alt={item.alt}
-            width={600}
-            height={800}
-            className="w-full rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
-          />
+            <Image
+              src={item.src}
+              alt={item.alt}
+              width={300}
+              height={500}
+              className="w-full rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+            />
 
             <div
               className={`absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent 
