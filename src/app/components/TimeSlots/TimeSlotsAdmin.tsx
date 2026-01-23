@@ -80,13 +80,15 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
       />
 
         <>
-          <motion.button
-            onClick={() => setShowSheet(true)}
-            whileTap={{ scale: 0.9 }}
-            className="fixed right-6 bottom-20 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
-          >
-            <Plus size={28} />
-          </motion.button>
+          {session?.user && (
+            <motion.button
+              onClick={() => setShowSheet(true)}
+              whileTap={{ scale: 0.9 }}
+              className="fixed right-6 bottom-20 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-pink-500/40 text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-pink-500/60"
+            >
+              <Plus size={28} />
+            </motion.button>
+          )}
 
           <AnimatePresence>
             {showSheet && (

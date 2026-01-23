@@ -1,4 +1,29 @@
-export default function ContactStep({handleChange, phone, name}: {handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void, phone: string, name: string}) {
+'use client'
+
+import { ContactForm, ContactScheme } from "@/lib/zodSchemes";
+import { useCallback, useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+export default function ContactStep({ onFormChange }: {onFormChange: ({name, phone}: {name: string, phone: string})  => void}) {
+	const { register, control, formState: { errors, isValid } } = useForm<ContactForm>({
+		resolver: zodResolver(ContactScheme),
+		mode: 'onChange',
+		defaultValues: {
+			name: '',
+			phone: ''
+		}
+	});
+
+	const name = useWatch({control, name: 'name'})
+	const phone = useWatch({control, name: 'phone'})
+
+	useEffect(() => {
+		console.log(isValid)
+		if (isValid)
+			onFormChange({name, phone});
+	}, [name, phone, isValid, onFormChange]);
+
   return (
       <div className="max-w-md mx-auto ">
         <div className="text-center mb-10">
@@ -18,9 +43,7 @@ export default function ContactStep({handleChange, phone, name}: {handleChange: 
                 <input
                   type="text"
                   id="name"
-                  name="name"
-                  value={name}
-                  onChange={handleChange}
+                  {...register("name")}
                   required
                   className="w-full px-4 py-3 bg-neutral-700/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   placeholder="Ваше имя"
@@ -41,6 +64,7 @@ export default function ContactStep({handleChange, phone, name}: {handleChange: 
                   </svg>
                 </div>
               </div>
+							{errors.name && <p className="text-red-500 mt-2">{errors.name.message}</p>}
             </div>
 
             {/* Поле телефона */}
@@ -49,9 +73,7 @@ export default function ContactStep({handleChange, phone, name}: {handleChange: 
                 <input
                   type="tel"
                   id="phone"
-                  name="phone"
-                  value={phone}
-                  onChange={handleChange}
+									{...register("phone")}
                   required
                   className="w-full px-4 py-3 bg-neutral-700/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
                   placeholder="Номер телефона"
@@ -72,6 +94,7 @@ export default function ContactStep({handleChange, phone, name}: {handleChange: 
                   </svg>
                 </div>
               </div>
+							{errors.phone && <p className="text-red-500 mt-2">{errors.phone.message}</p>}
             </div>
           </div>
         </form>

@@ -2,6 +2,8 @@ import z from "zod";
 
 export type CreateServiceFormValues = z.infer<typeof serviceSchema>;
 
+export type ContactForm = z.infer<typeof ContactScheme>;
+
 export const serviceSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(2, "Введите название"),
@@ -15,3 +17,8 @@ export const serviceSchema = z.object({
       "Выберите изображение"
     ),
 });
+
+export const ContactScheme = z.object({
+  name: z.string().min(2, "Введите имя"),
+  phone: z.string().min(11, "Введите номер телефона").regex(/^\s?(\+\s?7|8)([- ()]*\d){10}$/, { message: 'Неверный формат номера'})
+})

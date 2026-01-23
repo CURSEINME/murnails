@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Calendar from '../components/Calendar/Calendar';
 import TimeSlotsAdmin from '../components/TimeSlots/TimeSlotsAdmin';
 import Button from '../components/UI/Button';
@@ -11,6 +11,7 @@ import Stepper, { Step } from '@/components/Stepper';
 import { sendMail } from '../../../actions/email';
 import { toast } from 'react-toastify';
 import ContactStep from '../components/steps/ContactStep';
+import { ContactForm } from '@/lib/zodSchemes';
 
 interface TimeSlotsProps {
   selectedDate: Date | null;
@@ -76,33 +77,35 @@ const Page = () => {
 
   const [stepperKey, setStepperKey] = useState(0)
 
-  const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [contactData, setContactData] = useState<ContactForm>({ name: '', phone: '' });
 
   const searchParams = useSearchParams();
   const router = useRouter()
+
+  const onFormChange = useCallback(
+  (data: { name: string; phone: string }) => {
+    setContactData(data);
+  },
+  []);
 
   const payload = configureFinalPayload()
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
-  }
+  // function onChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  //   const { name, value } = e.target;
+  //   setContactData((prevState) => ({ ...prevState, [name]: value }));
+  // }
 
   function configureFinalPayload() {
     if (!selectedDate || !selectedTime) return null
-
-    const day = selectedDate?.getDate().toString() || ""
-    const month = selectedDate?.getMonth().toString() || ""
-    const year = selectedDate?.getFullYear().toString() || ""
-    const time = selectedTime || ''
     const service = searchParams.get("service") || ''
-    const tel = formData.phone
-    const name = formData.name
+    const tel = contactData.phone
+    const name = contactData.name
 
     return {
-      date: {day, month, year, time},
+      date: selectedDate,
+      time: selectedTime,
       service,
       tel,
       name
@@ -112,7 +115,7 @@ const Page = () => {
   async function handleStepChange(step: number) {
     if (step < currentStep) {
       if (step < 3) {
-        setFormData({name: '', phone: ''})
+        setContactData({name: '', phone: ''})
       }
 
       if (step < 2) {
@@ -120,7 +123,6 @@ const Page = () => {
       }
     }
 
-    setCurrentStep(step)
 
     if (step == 3) {
       const params = new URLSearchParams(searchParams.toString());
@@ -134,30 +136,15 @@ const Page = () => {
     }
     
     if (step == 4 && payload) {
-      console.log(payload)
       try {
-        const result = { ok: true, message: 'test'}
+        const result = await sendMail(payload);
 
-        if (result.ok) {
-          toast.success("✅ Ваша заявка успешно отправлена!", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setFormData({
-            name: "",
-            phone: "",
-          });
-        } else {
-          throw new Error(result.message);
+        if (!result.ok) {
+          setCurrentStep(prev => prev - 1)
+          throw new Error(`${result.message}`);
         }
-      } catch (error) {
-        toast.error("❌ Произошла ошибка при отправке", {
+
+        toast.success("✅ Ваша заявка успешно отправлена!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -167,35 +154,56 @@ const Page = () => {
           progress: undefined,
           theme: "dark",
         });
-        console.error("Ошибка:", error);
+        setContactData({
+          name: "",
+          phone: "",
+        });
+      } catch (error: unknown) {
+
+        if (error instanceof Error) {
+          toast.error(error.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          return
+        }
+
       }
     }
+
+    setCurrentStep(step)
   }
 
   async function handleReset() {
     router.push('/')
 
-    await new Promise((resolve) => setTimeout(resolve, 2000)).then(() => setStepperKey(prev => prev + 1))
+    // await new Promise((resolve) => setTimeout(resolve, 2000)).then(() => setStepperKey(prev => prev + 1))
 
     setSelectedDate(null);
     setSelectedTime(null);
-    setFormData({ name: '', phone: '' });
+    setContactData({ name: '', phone: '' });
     setCurrentStep(1);
   }
 
   return (
     <Stepper
-      key={stepperKey}
+      currentStep={currentStep}
+      // key={stepperKey}
       contentClassName='min-h-[350px]'
       stepCircleContainerClassName='max-w-[800px]! backdrop-blur-md bg-black/40'
-      initialStep={1}
-      onStepChange={(step) => handleStepChange(step)}
+      onStepChange={handleStepChange}
       onFinalStepCompleted={handleReset}
       nextButtonProps={{
         disabled:
           (currentStep === 1 && !selectedDate) ||
           (currentStep === 2 && !selectedTime) ||
-          (currentStep === 3 && (!formData.name || !formData.phone)),
+          (currentStep === 3 && (!contactData.name || !contactData.phone)),
       }}
       backButtonText="Назад"
       nextButtonText="Далее"
@@ -208,7 +216,7 @@ const Page = () => {
         <TimeSlotsStep setSelectedTime={setSelectedTime} selectedTime={selectedTime} selectedDate={selectedDate}/>
       </Step>
       <Step>
-        <ContactStep handleChange={onChange} {...formData}/>
+        <ContactStep onFormChange={onFormChange} {...contactData}/>
       </Step>
       <Step>
         <motion.div

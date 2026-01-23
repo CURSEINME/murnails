@@ -21,12 +21,41 @@ export async function createTimeSlot({
 }
 
 export async function getDateSlots() {
-  const res = await prisma.timeSlot.findMany();
+  const res = await prisma.timeSlot.findMany({
+    where: {
+      appointments: {
+        none: {
+          status: {
+            in: ["PENDING", "COMPLETED"]
+          }
+        }
+      }
+    },
+    orderBy: {
+      time: "asc"
+    }
+  });
   return res.map((r) => r.date);
 }
 
 export async function getTimeSlots(date: Date) {
-  const res = await prisma.timeSlot.findMany({ where: { date: date } });
+
+  const res = await prisma.timeSlot.findMany({
+    where: {
+      date,
+
+      appointments: {
+        none: {
+          status: {
+            in: ["PENDING", "COMPLETED"]
+          }
+        }
+      }
+    },
+    orderBy: {
+      time: "asc"
+    }
+  });
   return res.map((r) => r.time);
 }
 

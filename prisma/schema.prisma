@@ -7,50 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// Пользователь (клиент)
+model User {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  tel          String?
+  email        String?       @unique
+
+  appointments Appointment[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+/// Слот времени (расписание мастера)
 model TimeSlot {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  date      DateTime
-  time      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  date         DateTime
+  time         String
+
+  appointments Appointment[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@index([date])
-}
-model Account {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id])
-
-  @@unique([provider, providerAccountId])
+  @@unique([date, time]) // защита от дублей слотов
 }
 
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String   @db.ObjectId
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
+/// Запись клиента
+model Appointment {
+  id           String            @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId       String            @db.ObjectId
+  timeSlotId   String            @db.ObjectId
+
+  status       AppointmentStatus @default(PENDING)
+  service      String?
+
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timeSlot     TimeSlot          @relation(fields: [timeSlotId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([timeSlotId])
+  @@index([userId])
 }
 
-model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+/// Статус записи
+enum AppointmentStatus {
+  PENDING      // создана, но не подтверждена
+  CONFIRMED    // подтверждена мастером
+  CANCELLED    // отменена
+  COMPLETED    // услуга оказана
 }
+
 
 model Service {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId

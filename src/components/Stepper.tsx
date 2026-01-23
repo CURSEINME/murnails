@@ -3,6 +3,7 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Button from '@/app/components/UI/Button';
 
 interface StepperProps extends HTMLAttributes<HTMLDivElement> {
+  currentStep: number;
   children: ReactNode;
   initialStep?: number;
   onStepChange?: (step: number) => void;
@@ -24,8 +25,8 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function Stepper({
+  currentStep,
   children,
-  initialStep = 1,
   onStepChange = () => {},
   onFinalStepCompleted = () => {},
   stepCircleContainerClassName = '',
@@ -40,7 +41,6 @@ export default function Stepper({
   renderStepIndicator,
   ...rest
 }: StepperProps) {
-  const [currentStep, setCurrentStep] = useState<number>(initialStep);
   const [direction, setDirection] = useState<number>(0);
   const stepsArray = Children.toArray(children);
   const totalSteps = stepsArray.length;
@@ -48,7 +48,6 @@ export default function Stepper({
   const isLastStep = currentStep === totalSteps;
 
   const updateStep = (newStep: number) => {
-    setCurrentStep(newStep);
     if (newStep > totalSteps) {
       onFinalStepCompleted();
     } else {
@@ -183,9 +182,28 @@ function StepContentWrapper({
     >
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         {!isCompleted && (
+          
           <SlideTransition key={currentStep} direction={direction} onHeightReady={h => setParentHeight(h)}>
             {children}
           </SlideTransition>
+          // <motion.div
+          //   className="relative overflow-hidden"
+          //   style={{ height: 'auto' }} // можно убрать parentHeight совсем!
+          //   layout // ← магия: анимирует высоту автоматически
+          //   transition={{ type: 'spring', stiffness: 300, damping: 35 }}
+          // >
+          //   <AnimatePresence mode="wait" initial={false}>
+          //     <motion.div
+          //       key={currentStep}
+          //       initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
+          //       animate={{ opacity: 1, x: 0 }}
+          //       exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
+          //       transition={{ duration: 0.2, ease: 'easeInOut' }}
+          //     >
+          //       {children}
+          //     </motion.div>
+          //   </AnimatePresence>
+          // </motion.div>
         )}
       </AnimatePresence>
     </motion.div>

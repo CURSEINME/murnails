@@ -7,10 +7,13 @@ import Modal from './UI/Modal';
 import ServiceEditForm from './forms/ServiceEditForm';
 import ServiceCard from './ServiceCard';
 import { Plus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 const ServiceSelection = ({ services }: { services: Service[] }) => {
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [creatingService, setCreatingService] = useState(false);
+
+  const { data: user } = useSession()
 
   const [servicesState, setServicesState] = useState(services || []);
 
@@ -21,12 +24,14 @@ const ServiceSelection = ({ services }: { services: Service[] }) => {
 
   return (
     <>
-      <button
-        onClick={() => setCreatingService(true)}
-        className="fixed right-6 bottom-6 z-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 p-3 shadow-[0_0_10px_rgba(236,72,153,0.8)] transition hover:shadow-[0_0_20px_rgba(236,72,153,1)] lg:hidden"
-      >
-        <Plus className="h-6 w-6 text-white" />
-      </button>
+      { user?.user && (
+        <button
+          onClick={() => setCreatingService(true)}
+          className="fixed right-6 bottom-6 z-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 p-3 shadow-[0_0_10px_rgba(236,72,153,0.8)] transition hover:shadow-[0_0_20px_rgba(236,72,153,1)] lg:hidden"
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      )}
       <div className="mt-5 flex flex-col items-center">
         {/* Заголовок */}
         <div className="mb-10 text-center">
@@ -39,21 +44,23 @@ const ServiceSelection = ({ services }: { services: Service[] }) => {
           ))}
 
           {/* Карточка для создания нового сервиса */}
-          <div
-            onClick={() => setCreatingService(true)}
-            className="hidden cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-pink-400 p-6 text-center text-pink-400 transition hover:border-pink-500 hover:bg-pink-400/10 lg:flex"
-          >
-            <Plus className="h-10 w-10" />
-            <p className="mt-2 font-medium">Добавить сервис</p>
-          </div>
+          {user?.user && (
+            <div
+              onClick={() => setCreatingService(true)}
+              className="hidden cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-pink-400 p-6 text-center text-pink-400 transition hover:border-pink-500 hover:bg-pink-400/10 lg:flex"
+            >
+              <Plus className="h-10 w-10" />
+              <p className="mt-2 font-medium">Добавить сервис</p>
+            </div>
+          )}
         </div>
       </div>
-      {creatingService && (
+      {creatingService && user?.user && (
         <Modal overlayClassName="w-full max-w-[400px]" onClose={() => setCreatingService(false)}>
           {<ServiceCreateForm onClose={() => setCreatingService(false)} />}
         </Modal>
       )}
-      {editingService && (
+      {editingService && user?.user && (
         <Modal overlayClassName="w-full max-w-[400px]" onClose={() => setEditingService(null)}>
           {
             <ServiceEditForm

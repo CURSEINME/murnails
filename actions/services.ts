@@ -8,7 +8,6 @@ import { optimizeImage } from '@/lib/sharp';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { aws, BUCKET, ENDPOINT } from '@/lib/s3Client';
 import { revalidatePath } from 'next/cache';
-import { error } from 'console';
 
 export const createServiceAction = async (data: CreateServiceFormValues) => {
   try {
