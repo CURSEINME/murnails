@@ -140,7 +140,7 @@ export default function FaqMurnails() {
           transition={{ duration: 0.8 }}
           className="mx-auto mb-12 md:mb-16 text-center"
         >
-          <h2 className="text-3xl font-bold tracking-tight md:text-5xl">
+          <h2 className="bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-transparent text-3xl font-bold tracking-tight md:text-5xl lg:text-6xl">
             Часто задаваемые вопросы
           </h2>
 

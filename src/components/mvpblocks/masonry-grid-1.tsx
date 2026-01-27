@@ -26,14 +26,14 @@ const galleryItems = [
 
 export default function MasonryGallery() {
   return (
-    <div id='gallery' className="container mx-auto min-h-screen px-4 py-20 md:px-6">
+    <div id='gallery' className="container mx-auto min-h-screen px-4 py-16 md:py-24 md:px-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="text-center mb-20 bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent leading-tight">
+        <h2 className="text-center mb-10 bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-transparent leading-tight">
           Мои работы
         </h2>
       </motion.div>

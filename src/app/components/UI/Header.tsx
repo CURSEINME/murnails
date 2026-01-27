@@ -35,6 +35,10 @@ export default function Header(){
                 href="#faq" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
                 Вопросы
               </Link>
+              <Link 
+                href="#contacts" className="text-md font-medium text-zinc-300 hover:text-pink-400 transition-colors">
+                Контакты
+              </Link>
             </nav>
           </div>
 

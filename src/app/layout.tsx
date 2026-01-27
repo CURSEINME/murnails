@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BackgroundWrapper } from './components/BackgroundWrapper';
 import { NavbarDemo } from './components/UI/Navbar';
 import ScrollFix from './components/ScrollFix';
+import Footer from './components/UI/Footer';
 
 const comfortaa = Comfortaa({
   weight: ['400', '500', '600', '700'],
@@ -27,23 +28,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className='h-full'>
       <>
-        <body className={`${comfortaa.className} relative antialiased`}>
+        <body className={`${comfortaa.className} relative antialiased min-h-screen flex flex-col`}>
             <ScrollFix/>
             <div id='bg-root'/>
             <BackgroundWrapper/>
-            <div id='app-root'>
-              <Suspense>
-                <Providers>
-                  <main className="">
-                    <NavbarDemo/>
-                    {/* <Header></Header> */}
-                    {children}
-                  </main>
-                </Providers>
-              </Suspense>
-            </div>
+            <Suspense>
+              <Providers>
+                <NavbarDemo/>
+                <main className="flex-grow">
+                  {children}
+                </main>
+                <Footer/>
+              </Providers>
+            </Suspense>
           <ToastContainer
             position="top-center"
             autoClose={5000}

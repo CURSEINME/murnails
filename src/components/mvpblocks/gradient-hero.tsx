@@ -55,6 +55,8 @@ export default function ManicureHero() {
 
               <Button
                 href='#gallery'
+                size='lg'
+                className='w-full flex justify-center'
                 variant="secondary"
               >
                 Мои работы

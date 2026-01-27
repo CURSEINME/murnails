@@ -53,7 +53,7 @@ const defaultValues: AboutUsProps['values'] = [
   {
     title: 'Забота',
     description:
-      'Здоровье ногтей для меня на первом месте — стерильность, безопасность и качественные материалы.',
+      'Здоровье ногтей превыше всего: стерильность, безопасность, качественные материалы.',
     icon: 'Heart',
   },
   {
@@ -95,7 +95,7 @@ export default function AboutUsSalon() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="mx-auto mb-12 md:mb-16 max-w-3xl text-center"
         >
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+          <h1 className="bg-gradient-to-tl from-primary/30 via-foreground/90 to-foreground/70 bg-clip-text text-transparent text-4xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
             {aboutData.title}
           </h1>
           <p className="text-muted-foreground mt-6 text-xl md:text-2xl">

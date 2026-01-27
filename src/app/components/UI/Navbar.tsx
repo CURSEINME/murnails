@@ -30,6 +30,10 @@ export function NavbarDemo() {
       name: "Вопросы",
       link: "/#faq",
     },
+    {
+      name: "Контакты",
+      link: "/#contacts",
+    }
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
