@@ -43,19 +43,18 @@ export default function ContactSection() {
               <ContactRow
                 icon={<Phone />}
                 text="+7 (910) 122-58-48"
-                href="tel:+3721234567"
+                href="tel:+79101225848"
                 delay={0.2}
               />
               <ContactRow
                 icon={<Mail />}
-                text="katerina171204@gmail.com"
-                href="katerina171204@gmail.com"
+                text="k.riazanowa2015@yandex.ru"
+                href="mailto:k.riazanowa2015@yandex.ru"
                 delay={0.3}
               />
               <ContactRow
                 icon={<MapPin />}
                 text="Павлово, Чапаева 43а"
-                href="katerina171204@gmail.com"
                 delay={0.3}
               />
             </div>
@@ -118,7 +117,7 @@ function ContactRow({
 }: {
   icon: React.ReactNode;
   text: string;
-  href: string;
+  href?: string;
   delay: number;
 }) {
   return (

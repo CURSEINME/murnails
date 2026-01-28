@@ -133,6 +133,8 @@ export const updateServiceAction = async (data: CreateServiceFormValues) => {
 
       await aws.send(putCommand);
       imageUrl = `${ENDPOINT}/${BUCKET}/${fileName}`;
+
+      console.log(imageUrl)
     }
 
     const newService = await prisma.service.update({

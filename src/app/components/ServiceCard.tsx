@@ -18,8 +18,6 @@ interface Props {
 export default function ServiceCard({ service, onEdit }: Props) {
   const { data: session, status } = useSession();
 
-  console.log(session, status);
-
   const handleDelete = async (service: Service) => {
     if (confirm('Вы действительно хотите удалить услугу?')) {
       const res = await deleteServiceAction(service);
