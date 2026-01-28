@@ -194,8 +194,7 @@ const Page = () => {
   return (
     <Stepper
       currentStep={currentStep}
-      // key={stepperKey}
-      contentClassName='min-h-[350px]'
+      contentClassName='min-h-[360px]'
       stepCircleContainerClassName='max-w-[800px]! backdrop-blur-md bg-black/40'
       onStepChange={handleStepChange}
       onFinalStepCompleted={handleReset}

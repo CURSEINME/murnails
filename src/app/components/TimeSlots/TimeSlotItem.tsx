@@ -31,18 +31,14 @@ const TimeSlotItem: React.FC<TimeSlotItemProps> = ({
       whileTap={{ scale: 0.97 }}
       className={`
         group relative flex cursor-pointer items-center justify-between
-        rounded-2xl border px-4 py-3 backdrop-blur-xl transition-all
+        rounded-2xl border px-4 py-3 backdrop-blur-md transition-all
         ${
           isSelected
-            ? 'border-pink-500/60 bg-pink-500/20 shadow-[0_0_25px_rgba(236,72,153,0.45)]'
+            ? 'border-pink-500/50 bg-pink-500/30'
             : 'border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10'
         }
       `}
     >
-      {/* glow for selected */}
-      {isSelected && (
-        <div className="pointer-events-none absolute -inset-2 rounded-2xl bg-pink-500/30 blur-xl" />
-      )}
 
       <span
         className={`
