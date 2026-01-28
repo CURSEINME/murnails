@@ -3,6 +3,8 @@
 @import "tailwindcss";
 
 :root {
+  --header-height: 5rem;
+
   --background: oklch(0.20717 0.01233 347.53320);
   --foreground: oklch(0.98500 0.00000 0.00000);
   --card:       oklch(0.21027 0.01265 347.54927);

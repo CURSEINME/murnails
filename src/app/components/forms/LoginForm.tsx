@@ -42,7 +42,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="relative z-10 w-[90%] max-w-md rounded-2xl border border-white/20 bg-white/10 p-8 shadow-2xl">
+    <div className="h-full z-10 w-[90%] max-w-md rounded-2xl border border-white/20 bg-card/50 p-8 shadow-2xl">
       <h1 className="mb-6 text-center text-2xl font-bold text-white">Вход администратора</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
