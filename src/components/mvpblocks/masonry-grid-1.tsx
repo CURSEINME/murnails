@@ -13,7 +13,6 @@ const galleryItems = [
   { src: '/nails/nails7.webp', alt: 'Эстетика', description: 'Красота и ухоженность в аккуратном, практически незаметном исполнении' },
   { src: '/nails/nails17.webp', alt: 'Мужской маникюр', description: 'Аккуратность, ухоженность то, на что обратит внимание любая девушка' },
   { src: '/nails/nails4.webp', alt: 'Френч - геометрия', description: '' },
-  { src: '/nails/nails12.webp', alt: 'Классика', description: 'Красный на коротком овале - old money' },
   { src: '/nails/nails9.webp', alt: 'Идеальный квадрат', description: 'Те самые «инстаграмные» параллели и арки' },
   { src: '/nails/nails14.webp', alt: 'Фуксия', description: 'Ярко, стильно, дорого' },
   { src: '/nails/nails5.webp', alt: 'Бежевый - денежный цвет в этом месяце', description: 'Сочетание серого с молочным + золотая поталь' },
