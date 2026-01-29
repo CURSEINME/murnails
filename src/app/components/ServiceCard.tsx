@@ -56,17 +56,20 @@ export default function ServiceCard({ service, onEdit }: Props) {
 
       {/* Контент карточки */}
       <Link href={`/calendar?service=${service.title}`}>
-        <div className="h-48 overflow-hidden rounded-t-2xl">
-          {service.serviceImage.length > 0 ? (
-            <img
+        <div className="relative h-48 overflow-hidden rounded-t-2xl">
+          {service.serviceImage?.length > 0 ? (
+            <Image
               src={service.serviceImage}
               alt={service.title}
-              width={200}
-              height={200}
-              className="mx-auto h-full w-full object-cover"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              quality={80}
             />
           ) : (
-            <div className="flex h-[300px] w-[300px] items-center justify-center">No image</div>
+            <div className="flex h-full items-center justify-center bg-white/5 text-gray-400">
+              Нет изображения
+            </div>
           )}
         </div>
         <div className="flex h-1/2 flex-col p-5">

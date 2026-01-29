@@ -42,7 +42,7 @@ export default function ManicureHero() {
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start"
             >
               <Button
-                href="/service-sub"
+                href="/services"
                 variant="gradient"
                 className="shadow-pink-600/40 hover:shadow-pink-600/60 flex justify-center"
                 size="lg"
