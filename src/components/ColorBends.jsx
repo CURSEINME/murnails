@@ -205,8 +205,16 @@ export default function ColorBends({
       }
 
       resizeTimeoutRef.current = setTimeout(() => {
-        const w = container.clientWidth || 1;
-        const h = container.clientHeight || 1;
+        let w, h;
+
+        if (window.visualViewport) {
+          // iOS Safari — используем visualViewport для точного видимого размера
+          w = visualViewport.width;
+          h = visualViewport.height;
+        } else {
+          w = container.clientWidth || 1;
+          h = container.clientHeight || 1;
+        }
 
         renderer.setSize(w, h, false); // false — важно, чтобы не менять style.width/height
         material.uniforms.uCanvas.value.set(w, h);
@@ -214,6 +222,8 @@ export default function ColorBends({
     };
 
     handleResize();
+
+    const handleVisualResize = () => handleResize();
 
     if ('ResizeObserver' in window) {
       const ro = new ResizeObserver(handleResize);
@@ -244,7 +254,16 @@ export default function ColorBends({
     };
     rafRef.current = requestAnimationFrame(loop);
 
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualResize);
+      window.visualViewport.addEventListener('scroll', handleVisualResize); // на всякий случай
+    }
+
     return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualResize);
+        window.visualViewport.removeEventListener('scroll', handleVisualResize);
+      }
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
       if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
