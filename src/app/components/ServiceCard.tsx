@@ -38,7 +38,7 @@ export default function ServiceCard({ service, onEdit }: Props) {
     >
       {/* Кнопки действий */}
       {status === 'authenticated' && session?.user?.role === 'admin' && (
-        <div className="absolute top-3 right-3 flex items-center gap-2">
+        <div className="z-10 absolute top-3 right-3 flex items-center gap-2">
           <button
             onClick={() => onEdit(service)}
             className="rounded-xl bg-white/10 p-2 text-pink-300 transition-colors hover:bg-pink-500/30"
