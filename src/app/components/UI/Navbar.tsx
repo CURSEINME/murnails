@@ -49,14 +49,14 @@ export function NavbarDemo() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             {/* <NavbarButton variant="secondary">Login</NavbarButton> */}
-            <NavbarButton href='/service-sub' variant="gradient">Записаться</NavbarButton>
+            <NavbarButton href='/services' variant="gradient">Записаться</NavbarButton>
 						{user?.user.role === 'admin' && (
 							<NavbarButton
 								onClick={async () => await signOut()}
 								variant="primary"
 								className="w-full"
 							>
-								Logout
+								Выйти
 							</NavbarButton>
 						)}
           </div>
