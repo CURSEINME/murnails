@@ -75,7 +75,7 @@ const Page = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const [stepperKey, setStepperKey] = useState(0)
+  const [loading, setLoading] = useState(false);
 
   const [contactData, setContactData] = useState<ContactForm>({ name: '', phone: '' });
 
@@ -137,6 +137,9 @@ const Page = () => {
     
     if (step == 4 && payload) {
       try {
+        setLoading(true)
+        
+        await new Promise((resolve) => setTimeout(resolve, 5000))
         const result = await sendMail(payload);
 
         if (!result.ok) {
@@ -174,6 +177,8 @@ const Page = () => {
           return
         }
 
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -200,12 +205,13 @@ const Page = () => {
       onFinalStepCompleted={handleReset}
       nextButtonProps={{
         disabled:
+          loading ||
           (currentStep === 1 && !selectedDate) ||
           (currentStep === 2 && !selectedTime) ||
           (currentStep === 3 && (!contactData.name || !contactData.phone)),
       }}
       backButtonText="Назад"
-      nextButtonText="Далее"
+      nextButtonText={ loading ? 'Загрузка...' : 'Далее'}
       disableStepIndicators
     >
       <Step>
