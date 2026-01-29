@@ -132,6 +132,7 @@ export default function ColorBends({
 }) {
   const containerRef = useRef(null);
   const rendererRef = useRef(null);
+  const resizeTimeoutRef = useRef(null);
   const rafRef = useRef(null);
   const materialRef = useRef(null);
   const resizeObserverRef = useRef(null);
@@ -191,12 +192,25 @@ export default function ColorBends({
     container.appendChild(renderer.domElement);
 
     const clock = new THREE.Clock();
+    
 
     const handleResize = () => {
       const w = container.clientWidth || 1;
       const h = container.clientHeight || 1;
       renderer.setSize(w, h, false);
       material.uniforms.uCanvas.value.set(w, h);
+
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+
+      resizeTimeoutRef.current = setTimeout(() => {
+        const w = container.clientWidth || 1;
+        const h = container.clientHeight || 1;
+
+        renderer.setSize(w, h, false); // false — важно, чтобы не менять style.width/height
+        material.uniforms.uCanvas.value.set(w, h);
+      }, 200); // 100–150 мс debounce обычно хватает
     };
 
     handleResize();
@@ -233,6 +247,7 @@ export default function ColorBends({
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
       else window.removeEventListener('resize', handleResize);
       geometry.dispose();
       material.dispose();
