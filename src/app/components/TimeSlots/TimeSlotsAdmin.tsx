@@ -99,8 +99,8 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
                   onClick={() => setShowSheet(false)}
                 />
 
-                <Modal overlayClassName="max-w-md w-full" onClose={() => setShowSheet(false)}>
-                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-6 pb-8 text-center">
+                <Modal overlayClassName="max-w-[90%] w-full" onClose={() => setShowSheet(false)}>
+                  <div className="backdrop-blur-md flex flex-col items-center justify-center rounded-3xl border border-white/20 bg-card/50 p-6 pb-8 text-center">
                     <button
                       onClick={() => setShowSheet(false)}
                       className="absolute top-4 right-6 text-gray-400 transition-colors hover:text-pink-400"
@@ -129,11 +129,10 @@ const TimeSlotsAdmin: React.FC<TimeSlotsAdminProps> = ({
                           onChange={(e) => setNewTime(e.target.value)}
                           className="w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-center text-xl text-white transition-all duration-200 outline-none focus:border-pink-400 focus:bg-white/20"
                         />
-                        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 blur-sm"></div>
                       </div>
                     </div>
 
-                    <Button onClick={addTimeSlot} variant="primary" className="w-full max-w-sm">
+                    <Button onClick={addTimeSlot} variant="gradient" className="w-full max-w-sm">
                       Добавить
                     </Button>
                   </div>
