@@ -86,6 +86,11 @@ html, body {
   height: 100vh;
   z-index: -1;
   pointer-events: none;
+
+  -webkit-transform: translate3d(0, 0, 0);          /* force hardware acceleration + layer */
+  -webkit-backface-visibility: hidden;              /* убирает flicker при repaint */
+  transform: translateZ(0);                         /* ещё один слой GPU */
+  will-change: transform;
 }
 
 #app-root {
