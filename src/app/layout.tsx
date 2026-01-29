@@ -34,15 +34,17 @@ export default function RootLayout({
             <ScrollFix/>
             <div id='bg-root'/>
             <BackgroundWrapper/>
-            <Suspense>
-              <Providers>
-                <NavbarDemo/>
-                <main className="flex-grow">
-                  {children}
-                </main>
-                <Footer/>
-              </Providers>
-            </Suspense>
+            <div id='app-root'>
+              <Suspense>
+                <Providers>
+                  <NavbarDemo/>
+                  <main className="flex-grow">
+                    {children}
+                  </main>
+                  <Footer/>
+                </Providers>
+              </Suspense>
+            </div>
           <ToastContainer
             position="top-center"
             autoClose={5000}
