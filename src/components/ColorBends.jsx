@@ -1,23 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import * as THREE  from 'three';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
-type ColorBendsProps = {
-  className?: string;
-  style?: React.CSSProperties;
-  rotation?: number;
-  speed?: number;
-  colors?: string[];
-  transparent?: boolean;
-  autoRotate?: number;
-  scale?: number;
-  frequency?: number;
-  warpStrength?: number;
-  mouseInfluence?: number;
-  parallax?: number;
-  noise?: number;
-};
-
-const MAX_COLORS = 8 as const;
+const MAX_COLORS = 8;
 
 const frag = `
 #define MAX_COLORS ${MAX_COLORS}
@@ -111,6 +95,26 @@ void main() {
 }
 `;
 
+/**
+ * @typedef {Object} ColorBendsProps
+ * @property {string} [className] - CSS class name
+ * @property {Object} [style] - Inline styles
+ * @property {number} [rotation=45] - Initial rotation in degrees
+ * @property {number} [speed=0.2] - Animation speed
+ * @property {string[]} [colors=[]] - Array of hex color strings
+ * @property {boolean} [transparent=true] - Enable transparency
+ * @property {number} [autoRotate=0] - Auto rotation speed
+ * @property {number} [scale=1] - Scale factor
+ * @property {number} [frequency=1] - Frequency of waves
+ * @property {number} [warpStrength=1] - Warp strength
+ * @property {number} [mouseInfluence=1] - Mouse influence strength
+ * @property {number} [parallax=0.5] - Parallax effect strength
+ * @property {number} [noise=0.1] - Noise strength
+ */
+
+/**
+ * @param {ColorBendsProps} props
+ */
 export default function ColorBends({
   className,
   style,
@@ -122,22 +126,23 @@ export default function ColorBends({
   scale = 1,
   frequency = 1,
   warpStrength = 1,
-  mouseInfluence = 0,
-  parallax = 0,
-  noise = 0
-}: ColorBendsProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
-  const rotationRef = useRef<number>(rotation);
-  const autoRotateRef = useRef<number>(autoRotate);
-  const pointerTargetRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
-  const pointerCurrentRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
-  const pointerSmoothRef = useRef<number>(8);
+  mouseInfluence = 1,
+  parallax = 0.5,
+  noise = 0.1
+}) {
+  const containerRef = useRef(null);
+  const rendererRef = useRef(null);
+  const rafRef = useRef(null);
+  const materialRef = useRef(null);
+  const resizeObserverRef = useRef(null);
+  const rotationRef = useRef(rotation);
+  const autoRotateRef = useRef(autoRotate);
+  const pointerTargetRef = useRef(new THREE.Vector2(0, 0));
+  const pointerCurrentRef = useRef(new THREE.Vector2(0, 0));
+  const pointerSmoothRef = useRef(8);
 
   useEffect(() => {
-    const container = containerRef.current!;
+    const container = containerRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -170,14 +175,14 @@ export default function ColorBends({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent); // Добавил для power
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
-      powerPreference: isIOS ? 'default' : 'high-performance', // Фикс для iOS throttling
+      powerPreference: 'high-performance',
       alpha: true
     });
     rendererRef.current = renderer;
-    (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
+    // Three r152+ uses outputColorSpace and SRGBColorSpace
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
@@ -185,14 +190,24 @@ export default function ColorBends({
     renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
 
-    // Set size только раз, на window (для full-screen)
-    const vw = window.visualViewport?.width || window.innerWidth;
-    const vh = window.visualViewport?.height || window.innerHeight;
-    
-    renderer.setSize(vw, vh, false);
-    material.uniforms.uCanvas.value.set(vw, vh);
-
     const clock = new THREE.Clock();
+
+    const handleResize = () => {
+      const w = container.clientWidth || 1;
+      const h = container.clientHeight || 1;
+      renderer.setSize(w, h, false);
+      material.uniforms.uCanvas.value.set(w, h);
+    };
+
+    handleResize();
+
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(handleResize);
+      ro.observe(container);
+      resizeObserverRef.current = ro;
+    } else {
+      window.addEventListener('resize', handleResize);
+    }
 
     const loop = () => {
       const dt = clock.getDelta();
@@ -203,13 +218,13 @@ export default function ColorBends({
       const rad = (deg * Math.PI) / 180;
       const c = Math.cos(rad);
       const s = Math.sin(rad);
-      (material.uniforms.uRot.value as THREE.Vector2).set(c, s);
+      material.uniforms.uRot.value.set(c, s);
 
       const cur = pointerCurrentRef.current;
       const tgt = pointerTargetRef.current;
       const amt = Math.min(1, dt * pointerSmoothRef.current);
       cur.lerp(tgt, amt);
-      (material.uniforms.uPointer.value as THREE.Vector2).copy(cur);
+      material.uniforms.uPointer.value.copy(cur);
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -217,6 +232,8 @@ export default function ColorBends({
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
+      else window.removeEventListener('resize', handleResize);
       geometry.dispose();
       material.dispose();
       renderer.dispose();
@@ -224,9 +241,7 @@ export default function ColorBends({
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
-
-  // Остальные useEffect без изменений (пропсы, pointer)
+  }, [frequency, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
 
   useEffect(() => {
     const material = materialRef.current;
@@ -243,7 +258,7 @@ export default function ColorBends({
     material.uniforms.uParallax.value = parallax;
     material.uniforms.uNoise.value = noise;
 
-    const toVec3 = (hex: string) => {
+    const toVec3 = hex => {
       const h = hex.replace('#', '').trim();
       const v =
         h.length === 3
@@ -254,7 +269,7 @@ export default function ColorBends({
 
     const arr = (colors || []).filter(Boolean).slice(0, MAX_COLORS).map(toVec3);
     for (let i = 0; i < MAX_COLORS; i++) {
-      const vec = (material.uniforms.uColors.value as THREE.Vector3[])[i];
+      const vec = material.uniforms.uColors.value[i];
       if (i < arr.length) vec.copy(arr[i]);
       else vec.set(0, 0, 0);
     }
@@ -281,18 +296,18 @@ export default function ColorBends({
     const container = containerRef.current;
     if (!material || !container) return;
 
-    const handlePointerMove = (e: PointerEvent) => {
-      // Переход на window для pointer (чтобы работал с pointerEvents: none)
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = - (e.clientY / window.innerHeight) * 2 + 1;
+    const handlePointerMove = e => {
+      const rect = container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+      const y = -(((e.clientY - rect.top) / (rect.height || 1)) * 2 - 1);
       pointerTargetRef.current.set(x, y);
     };
 
-    window.addEventListener('pointermove', handlePointerMove); // На window!
+    container.addEventListener('pointermove', handlePointerMove);
     return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
+      container.removeEventListener('pointermove', handlePointerMove);
     };
   }, []);
 
-  return <div ref={containerRef} className={`w-full h-full relative overflow-hidden ${className}`} style={{ ...style, pointerEvents: 'none' }} />; // Добавил none
+  return <div ref={containerRef} className={`w-full h-full relative overflow-hidden ${className}`} style={style} />;
 }
