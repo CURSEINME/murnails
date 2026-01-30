@@ -8,7 +8,7 @@ import ContactSection from "./components/ContactSection";
 
 export default function Home() {
   return (
-    <main className="">
+    <>
 
         <GradientHero/>
         <AboutUsSalon/> 
@@ -23,6 +23,6 @@ export default function Home() {
         
         <FaqMurnails/>
         <ContactSection />
-    </main>
+    </>
   );
 }

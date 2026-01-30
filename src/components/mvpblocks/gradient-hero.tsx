@@ -8,8 +8,8 @@ import Button from '@/app/components/UI/Button';
 
 export default function ManicureHero() {
   return (
-    <section className="relative min-h-[calc(100vh-86px)] w-full overflow-hidden">
-      <div className="container mx-auto flex min-h-[calc(100vh-86px)] items-center px-4 sm:px-6 lg:px-8">
+    <section className="relative h-[calc(100dvh-86px)] w-full overflow-hidden">
+      <div className="container mx-auto flex h-[calc(100dvh-86px)] items-center px-4 sm:px-6 lg:px-8">
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-4">
 
           {/* LEFT — TEXT (уменьшен, поддерживающий) */}
