@@ -32,7 +32,7 @@ export default function RootLayout({
       <>
         <body className={`${comfortaa.className} relative antialiased min-h-screen flex flex-col`}>
             <ScrollFix/>
-            <div id='bg-root'/>
+            {/* <div id='bg-root'/> */}
             <BackgroundWrapper/>
             <div id='app-root'>
               <Suspense>

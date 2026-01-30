@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import ColorBends from '@/components/ColorBends';
 
 export function BackgroundWrapper() {
@@ -13,11 +12,9 @@ export function BackgroundWrapper() {
 
   if (!mounted) return null;
 
-  const bgRoot = document.getElementById('bg-root');
-  if (!bgRoot) return null;
-
-  return createPortal(
-    <ColorBends
+  return (
+    <div style={{ width: '100%', height: '100%', inset: '0', position: 'fixed' }}>
+      <ColorBends
       colors={['#0e0610', '#3a1227', '#7a2e5f']}
       rotation={0.2}
       speed={0.1}
@@ -25,7 +22,8 @@ export function BackgroundWrapper() {
       frequency={1}
       warpStrength={1}
       noise={0}
-    />,
-    bgRoot
+      />
+    </div>
+    
   );
 }

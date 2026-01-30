@@ -186,10 +186,11 @@ export default function ColorBends({
     container.appendChild(renderer.domElement);
 
     // Set size только раз, на window (для full-screen)
-    const w = window.innerWidth || 1;
-    const h = window.innerHeight || 1;
-    renderer.setSize(w, h, false);
-    material.uniforms.uCanvas.value.set(w, h);
+    const vw = window.visualViewport?.width || window.innerWidth;
+    const vh = window.visualViewport?.height || window.innerHeight;
+    
+    renderer.setSize(vw, vh, false);
+    material.uniforms.uCanvas.value.set(vw, vh);
 
     const clock = new THREE.Clock();
 
